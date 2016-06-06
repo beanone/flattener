@@ -71,15 +71,14 @@ public abstract class AbstractUnflattener implements Unflattener {
 			}
 			return object;
 		} catch (InstantiationException | IllegalAccessException
-		        | InvocationTargetException | SecurityException
-		        | ClassNotFoundException e) {
+		        | InvocationTargetException | ClassNotFoundException e) {
 			throw new FlattenerException(e);
 		}
 	}
 
 	protected abstract Object doCreateObject(Map<String, String> flatted,
-	        KeyStack keyStack, Class<?> clazz) throws InstantiationException,
-	        IllegalAccessException, SecurityException,
+	        KeyStack keyStack, Class<?> clazz)
+	        throws InstantiationException, IllegalAccessException,
 	        InvocationTargetException, ClassNotFoundException;
 
 	protected abstract void doPopulate(Object object, String key,

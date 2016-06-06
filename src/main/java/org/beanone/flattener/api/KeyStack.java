@@ -21,9 +21,4 @@ public class KeyStack {
 	public void push(String element) {
 		data.addFirst(element);
 	}
-
-	@Override
-	public String toString() {
-		return data.toString();
-	}
 }

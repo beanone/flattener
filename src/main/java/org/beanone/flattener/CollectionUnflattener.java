@@ -14,9 +14,8 @@ public class CollectionUnflattener extends AbstractUnflattener {
 
 	@Override
 	protected Object doCreateObject(Map<String, String> flatted,
-	        KeyStack keyStack, Class<?> clazz)
-	        throws InstantiationException, IllegalAccessException,
-	        SecurityException, InvocationTargetException {
+	        KeyStack keyStack, Class<?> clazz) throws InstantiationException,
+	        IllegalAccessException, InvocationTargetException {
 		return getUtil().createObject(clazz);
 	}
 

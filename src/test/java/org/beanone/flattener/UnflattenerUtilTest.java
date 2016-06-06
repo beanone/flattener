@@ -75,6 +75,15 @@ public class UnflattenerUtilTest {
 	}
 
 	@Test
+	public void testPopulateIgnoreNoSuchMethodException() throws Exception {
+		final ClassWithAttributeNoSetter bean = new ClassWithAttributeNoSetter();
+		util.populate(bean, "withSetter", 0, "Hello");
+		util.populate(bean, "noSetter", 0, "Hello");
+		Assert.assertEquals("Hello", bean.getWithSetter());
+		Assert.assertNull(bean.getNoSetter());
+	}
+
+	@Test
 	public void testReadPrimitiveValue() {
 		Assert.assertEquals(10, util.readPrimitiveValue("I,10"));
 		Assert.assertEquals(10.0, util.readPrimitiveValue("D,10"));

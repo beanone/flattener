@@ -97,7 +97,6 @@ class UnflattenerUtil {
 		        .toClass(typeAbbr);
 		final ValueConverter<?> valueConverter = getFlattenerRegistry()
 		        .getValueTypeRegistry().getConverter(clazz);
-		final Object value = valueConverter.valueOf(valueStr);
-		return value;
+		return valueConverter.valueOf(valueStr);
 	}
 }

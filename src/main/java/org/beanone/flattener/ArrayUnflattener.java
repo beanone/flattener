@@ -18,8 +18,8 @@ public class ArrayUnflattener extends AbstractUnflattener {
 
 	@Override
 	protected Object doCreateObject(Map<String, String> flatted,
-	        KeyStack keyStack, Class<?> clazz) throws InstantiationException,
-	        IllegalAccessException, SecurityException,
+	        KeyStack keyStack, Class<?> clazz)
+	        throws InstantiationException, IllegalAccessException,
 	        InvocationTargetException, ClassNotFoundException {
 		final String sizeKey = getUtil().popExpectSuffix(keyStack, SIZE_SUFFIX);
 		// check pop the etyp attribute

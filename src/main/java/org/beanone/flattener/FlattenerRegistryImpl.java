@@ -15,14 +15,6 @@ import org.beanone.flattener.api.UnflattenerResolver;
 import org.beanone.flattener.api.ValueConverter;
 
 class FlattenerRegistryImpl implements FlattenerRegistry {
-	private static Class<?> newClass(String s) {
-		try {
-			return Class.forName(s.substring(6).trim());
-		} catch (final ClassNotFoundException e) {
-			throw new FlattenerException(e);
-		}
-	}
-
 	private final Map<FlattenerResolver, Flattener> flatteners = new HashMap<>();
 	private final Map<UnflattenerResolver, Unflattener> unflatteners = new HashMap<>();
 	private final Flattener defaultFlattener = new DefaultFlattener(this);
@@ -53,8 +45,13 @@ class FlattenerRegistryImpl implements FlattenerRegistry {
 		valueTypeRegistry.register(Boolean.class, Boolean::valueOf);
 		valueTypeRegistry.register(Character.class, v -> v.charAt(0));
 		valueTypeRegistry.register(String.class, v -> v);
-		valueTypeRegistry.register(Class.class,
-		        FlattenerRegistryImpl::newClass);
+		valueTypeRegistry.register(Class.class, v -> {
+			try {
+				return Class.forName(v.substring(6).trim());
+			} catch (final ClassNotFoundException e) {
+				throw new FlattenerException(e);
+			}
+		});
 
 		try {
 			valueTypeRegistry.register(ClassUtils.getClass("int"),

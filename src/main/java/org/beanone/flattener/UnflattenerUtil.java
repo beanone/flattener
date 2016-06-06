@@ -13,8 +13,13 @@ import org.beanone.flattener.api.FlattenerRegistry;
 import org.beanone.flattener.api.KeyStack;
 import org.beanone.flattener.api.TypeNameAbbretionMap;
 import org.beanone.flattener.api.ValueConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class UnflattenerUtil {
+	private static final Logger LOGGER = LoggerFactory
+	        .getLogger(UnflattenerUtil.class);
+
 	private final FlattenerRegistry flattenerRegistry;
 
 	UnflattenerUtil(FlattenerRegistry flattenerRegistry) {
@@ -66,7 +71,7 @@ class UnflattenerUtil {
 			PropertyUtils.setProperty(object, extractFieldName(key, suffixSize),
 			        value);
 		} catch (final NoSuchMethodException e) {
-			e.printStackTrace();
+			LOGGER.warn(e.getMessage(), e);
 		}
 	}
 

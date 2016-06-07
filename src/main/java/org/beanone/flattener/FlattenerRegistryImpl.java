@@ -45,13 +45,7 @@ class FlattenerRegistryImpl implements FlattenerRegistry {
 		valueTypeRegistry.register(Boolean.class, Boolean::valueOf);
 		valueTypeRegistry.register(Character.class, v -> v.charAt(0));
 		valueTypeRegistry.register(String.class, v -> v);
-		valueTypeRegistry.register(Class.class, v -> {
-			try {
-				return Class.forName(v.substring(6).trim());
-			} catch (final ClassNotFoundException e) {
-				throw new FlattenerException(e);
-			}
-		});
+		valueTypeRegistry.register(Class.class, UnflattenerUtil::classValueOf);
 
 		try {
 			valueTypeRegistry.register(ClassUtils.getClass("int"),

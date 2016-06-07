@@ -13,6 +13,18 @@ public class UnflattenerUtilTest {
 	        new FlattenerRegistryImpl());
 
 	@Test
+	public void testClassValueOf() {
+		final Class<Integer> clazz = Integer.class;
+		Assert.assertEquals(clazz,
+		        UnflattenerUtil.classValueOf(clazz.toString()));
+	}
+
+	@Test(expected = FlattenerException.class)
+	public void testClassValueOfWithClassNotFound() {
+		UnflattenerUtil.classValueOf("badname");
+	}
+
+	@Test
 	public void testCreateObject() throws Exception {
 		testCreateObject(SimpleTestBean.class);
 		testCreateObject(ArrayList.class);

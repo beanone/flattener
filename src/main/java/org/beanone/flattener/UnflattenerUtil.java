@@ -20,6 +20,18 @@ class UnflattenerUtil {
 	private static final Logger LOGGER = LoggerFactory
 	        .getLogger(UnflattenerUtil.class);
 
+	public static Class<?> classValueOf(String classToString) {
+		try {
+			// Class.toString gives something like "class
+			// org.beanone.flatter.SimpleTestBean"
+			// remove the first 6 characters, leaves the class name.
+			return Class.forName(classToString.substring(6).trim());
+		} catch (final ClassNotFoundException e) {
+			throw new FlattenerException(e);
+		}
+
+	}
+
 	private final FlattenerRegistry flattenerRegistry;
 
 	UnflattenerUtil(FlattenerRegistry flattenerRegistry) {

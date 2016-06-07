@@ -13,6 +13,18 @@ public class UnflattenerUtilTest {
 	        new FlattenerRegistryImpl());
 
 	@Test
+	public void testClassValueOf() {
+		final Class<Integer> clazz = Integer.class;
+		Assert.assertEquals(clazz,
+		        UnflattenerUtil.classValueOf(clazz.toString()));
+	}
+
+	@Test(expected = FlattenerException.class)
+	public void testClassValueOfWithClassNotFound() {
+		UnflattenerUtil.classValueOf("badname");
+	}
+
+	@Test
 	public void testCreateObject() throws Exception {
 		testCreateObject(SimpleTestBean.class);
 		testCreateObject(ArrayList.class);
@@ -72,6 +84,15 @@ public class UnflattenerUtilTest {
 		util.populateCollection(integers, 10);
 		Assert.assertEquals(1, integers.size());
 		Assert.assertEquals(new Integer(10), integers.iterator().next());
+	}
+
+	@Test
+	public void testPopulateIgnoreNoSuchMethodException() throws Exception {
+		final ClassWithAttributeNoSetter bean = new ClassWithAttributeNoSetter();
+		util.populate(bean, "withSetter", 0, "Hello");
+		util.populate(bean, "noSetter", 0, "Hello");
+		Assert.assertEquals("Hello", bean.getWithSetter());
+		Assert.assertNull(bean.getNoSetter());
 	}
 
 	@Test

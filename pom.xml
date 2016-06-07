@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.beanone</groupId>
 	<artifactId>flattener</artifactId>
-	<version>1.0</version>
+	<version>1.1</version>
 
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>A utility library that allows one to turn a JavaBean into a flat Map of attributes</description>
@@ -28,7 +28,12 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<commons-beanutils.version>1.9.2</commons-beanutils.version>
 		<junit.version>4.12</junit.version>
+		<commons-lang3.version>3.4</commons-lang3.version>
 		<maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
+		<slf4j.version>1.7.21</slf4j.version>
+		<mockito.version>2.0.53-beta</mockito.version>
+		<sonar-jacoco.version>3.8</sonar-jacoco.version>
+		<argLine>-Xmx128m</argLine>
 	</properties>
 
 	<dependencies>
@@ -38,24 +43,26 @@
 			<version>${commons-beanutils.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>3.4</version>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>2.0.53-beta</version>
+			<version>${commons-lang3.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.7.21</version>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>${mockito.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
@@ -69,17 +76,19 @@
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
 	</distributionManagement>
-	
+
 	<developers>
 		<developer>
 			<id>hongyan</id>
 			<name>Hongyan Li</name>
 			<email>hongyan99@yahoo.com</email>
-			<roles><role>lead</role></roles>
+			<roles>
+				<role>lead</role>
+			</roles>
 			<url>https://www.linkedin.com/in/hongyan99</url>
 		</developer>
 	</developers>
-	
+
 	<build>
 		<plugins>
 			<plugin>
@@ -187,6 +196,38 @@
 		</plugins>
 	</build>
 	
+	<profiles>
+		<profile>
+			<id>coverage</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<!-- Minimal supported version is 2.4 -->
+						<version>2.13</version>
+						<configuration>
+							<properties>
+								<property>
+									<name>listener</name>
+									<value>org.sonar.java.jacoco.JUnitListener</value>
+								</property>
+							</properties>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<dependencies>
+				<dependency>
+					<groupId>org.sonarsource.java</groupId>
+					<artifactId>sonar-jacoco-listeners</artifactId>
+					<version>${sonar-jacoco.version}</version>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
+
 	<issueManagement>
 		<url>https://github.com/hongyan99/beanmap/issues</url>
 	</issueManagement>

@@ -20,6 +20,7 @@ public class SimpleTestBean {
 	private String strVal = "abc";
 	private SimpleTestBean selfRef = this;
 	private int[] arrayOfInts;
+	private ColorEnum color = ColorEnum.RED;
 
 	public int[] getArrayOfInts() {
 		return arrayOfInts;
@@ -43,6 +44,10 @@ public class SimpleTestBean {
 
 	public Character getCharValue() {
 		return charValue;
+	}
+
+	public ColorEnum getColor() {
+		return color;
 	}
 
 	public double getDoubleVal() {
@@ -123,6 +128,10 @@ public class SimpleTestBean {
 
 	public void setCharValue(Character charValue) {
 		this.charValue = charValue;
+	}
+
+	public void setColor(ColorEnum color) {
+		this.color = color;
 	}
 
 	public void setDoubleVal(double doubleVal) {

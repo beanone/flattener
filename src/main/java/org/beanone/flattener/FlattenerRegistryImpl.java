@@ -18,7 +18,11 @@ class FlattenerRegistryImpl implements FlattenerRegistry {
 	private final Map<FlattenerResolver, Flattener> flatteners = new HashMap<>();
 	private final Map<UnflattenerResolver, Unflattener> unflatteners = new HashMap<>();
 	private final Flattener defaultFlattener = new DefaultFlattener(this);
+	private final Flattener defaultEnumFlattener = new DefaultEnumFlattener(
+	        this);
 	private final Unflattener defaultUnflattener = new DefaultUnflattener(this);
+	private final Unflattener defaultEnumUnflattener = new DefaultEnumUnflattener(
+	        this);
 	private final PrimitiveValueRegistry valueTypeRegistry = new PrimitiveValueRegistryImpl();
 
 	public FlattenerRegistryImpl() {
@@ -82,6 +86,10 @@ class FlattenerRegistryImpl implements FlattenerRegistry {
 				return entry.getValue();
 			}
 		}
+
+		if (value instanceof Enum) {
+			return defaultEnumFlattener;
+		}
 		return defaultFlattener;
 	}
 
@@ -92,6 +100,10 @@ class FlattenerRegistryImpl implements FlattenerRegistry {
 			if (clazz != null && entry.getKey().accept(clazz)) {
 				return entry.getValue();
 			}
+		}
+
+		if (clazz != null && clazz.isEnum()) {
+			return defaultEnumUnflattener;
 		}
 		return defaultUnflattener;
 	}

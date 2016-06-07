@@ -32,7 +32,7 @@ public class DefaultFlattenerTest {
 	public void testFlat() {
 		final Map<String, String> result = flattener.flat(new SimpleTestBean());
 		Assert.assertNotNull(result);
-		Assert.assertEquals(19, result.size());
+		Assert.assertEquals(21, result.size());
 		Assert.assertEquals("org.beanone.flattener.SimpleTestBean",
 		        result.get("#1ctype"));
 		Assert.assertEquals("I,1", result.get("intVal"));

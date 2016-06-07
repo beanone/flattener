@@ -13,3 +13,13 @@ Since a flat map is much more efficient and easier to work with, this opens up g
 * Generic persistence allow easy navigation from snapshot to snapshot
 * Generic object equals (as a special case for the below)
 * Generic rules built for objects-configuration driven (e.g., rules to determine similar beans)
+
+## Usage
+
+### For flattening:
+
+	Map<String, String> flatted = new FlattenerTool().flat(aBean);
+
+### For unflattening:
+
+	Object aBean = new FlattenerTool().unflat(flatted);

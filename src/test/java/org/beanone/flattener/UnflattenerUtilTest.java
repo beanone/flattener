@@ -87,6 +87,15 @@ public class UnflattenerUtilTest {
 	}
 
 	@Test
+	public void testPopulateEnumInEnumHolder() throws Exception {
+		final SimpleTestBean bean = new SimpleTestBean();
+		final EnumHolder holder = new EnumHolder(ColorEnum.class);
+		holder.setValue(ColorEnum.BLUE);
+		util.populate(bean, "color#1ctype", 7, holder);
+		Assert.assertSame(ColorEnum.BLUE, bean.getColor());
+	}
+
+	@Test
 	public void testPopulateIgnoreNoSuchMethodException() throws Exception {
 		final ClassWithAttributeNoSetter bean = new ClassWithAttributeNoSetter();
 		util.populate(bean, "withSetter", 0, "Hello");

@@ -1,5 +1,12 @@
 package org.beanone.flattener;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
+
 public class SimpleTestBean {
 	private int intVal = 1;
 	private long longVal = 1L;
@@ -20,9 +27,26 @@ public class SimpleTestBean {
 	private String strVal = "abc";
 	private SimpleTestBean selfRef = this;
 	private int[] arrayOfInts;
+	private ColorEnum color = ColorEnum.RED;
+	private Date utilDateVal = Calendar.getInstance().getTime();
+	private java.sql.Date sqlDateVal = new java.sql.Date(
+	        Calendar.getInstance().getTime().getTime());
+	private Time timeVal = new Time(367890);
+	private Timestamp tsVal = new Timestamp(367890);
+	private BigInteger biVal = BigInteger.valueOf(Long.MAX_VALUE)
+	        .nextProbablePrime();
+	private BigDecimal bdVal = BigDecimal.valueOf(Double.MAX_VALUE).pow(2);
 
 	public int[] getArrayOfInts() {
 		return arrayOfInts;
+	}
+
+	public BigDecimal getBdVal() {
+		return bdVal;
+	}
+
+	public BigInteger getBiVal() {
+		return biVal;
 	}
 
 	public Boolean getBooleanValue() {
@@ -43,6 +67,10 @@ public class SimpleTestBean {
 
 	public Character getCharValue() {
 		return charValue;
+	}
+
+	public ColorEnum getColor() {
+		return color;
 	}
 
 	public double getDoubleVal() {
@@ -89,8 +117,24 @@ public class SimpleTestBean {
 		return shortValue;
 	}
 
+	public java.sql.Date getSqlDateVal() {
+		return sqlDateVal;
+	}
+
 	public String getStrVal() {
 		return strVal;
+	}
+
+	public Time getTimeVal() {
+		return timeVal;
+	}
+
+	public Timestamp getTsVal() {
+		return tsVal;
+	}
+
+	public Date getUtilDateVal() {
+		return utilDateVal;
 	}
 
 	public boolean isBooleanVal() {
@@ -99,6 +143,14 @@ public class SimpleTestBean {
 
 	public void setArrayOfInts(int[] arrayOfInts) {
 		this.arrayOfInts = arrayOfInts;
+	}
+
+	public void setBdVal(BigDecimal bdVal) {
+		this.bdVal = bdVal;
+	}
+
+	public void setBiVal(BigInteger bi) {
+		biVal = bi;
 	}
 
 	public void setBooleanVal(boolean booleanVal) {
@@ -123,6 +175,10 @@ public class SimpleTestBean {
 
 	public void setCharValue(Character charValue) {
 		this.charValue = charValue;
+	}
+
+	public void setColor(ColorEnum color) {
+		this.color = color;
 	}
 
 	public void setDoubleVal(double doubleVal) {
@@ -169,7 +225,23 @@ public class SimpleTestBean {
 		this.shortValue = shortValue;
 	}
 
+	public void setSqlDateVal(java.sql.Date sqlDateValue) {
+		sqlDateVal = sqlDateValue;
+	}
+
 	public void setStrVal(String strVal) {
 		this.strVal = strVal;
+	}
+
+	public void setTimeVal(Time timeVal) {
+		this.timeVal = timeVal;
+	}
+
+	public void setTsVal(Timestamp tsVal) {
+		this.tsVal = tsVal;
+	}
+
+	public void setUtilDateVal(Date date) {
+		utilDateVal = date;
 	}
 }

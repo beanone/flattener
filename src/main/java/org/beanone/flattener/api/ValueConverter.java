@@ -24,7 +24,7 @@ public interface ValueConverter<T> {
 
 	default String toTypedString(Object value) {
 		return value == null ? null
-		        : getTypeAbbreviation(value) + "," + value.toString();
+		        : getTypeAbbreviation(value) + "," + toString(value);
 	}
 
 	T valueOf(String string);

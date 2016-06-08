@@ -1,5 +1,7 @@
 package org.beanone.flattener;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Map;
 
 import org.junit.Assert;
@@ -32,7 +34,7 @@ public class DefaultFlattenerTest {
 	public void testFlat() {
 		final Map<String, String> result = flattener.flat(new SimpleTestBean());
 		Assert.assertNotNull(result);
-		Assert.assertEquals(19, result.size());
+		Assert.assertEquals(27, result.size());
 		Assert.assertEquals("org.beanone.flattener.SimpleTestBean",
 		        result.get("#1ctype"));
 		Assert.assertEquals("I,1", result.get("intVal"));
@@ -54,6 +56,15 @@ public class DefaultFlattenerTest {
 		Assert.assertEquals("S,abc", result.get("strVal"));
 		// self reference
 		Assert.assertEquals("", result.get("selfRef#ref"));
+		assertTypedValue(result, "utilDateVal", "d");
+		assertTypedValue(result, "sqlDateVal", "sd");
+		assertTypedValue(result, "timeVal", "t");
+		assertTypedValue(result, "tsVal", "ts");
+		Assert.assertEquals("BI," + BigInteger.valueOf(Long.MAX_VALUE)
+		        .nextProbablePrime().toString(), result.get("biVal"));
+		Assert.assertEquals(
+		        "BD," + BigDecimal.valueOf(Double.MAX_VALUE).pow(2).toString(),
+		        result.get("bdVal"));
 	}
 
 	public void testFlatArray() {
@@ -61,5 +72,11 @@ public class DefaultFlattenerTest {
 		final Map<String, String> map = flattener.flat(arr);
 		Assert.assertNotNull(map);
 		Assert.assertEquals(5, map.size());
+	}
+
+	private void assertTypedValue(Map<String, String> result, String key,
+	        String abbr) {
+		Assert.assertNotNull(result.get(key));
+		Assert.assertTrue(result.get(key).startsWith(abbr + ","));
 	}
 }

@@ -80,8 +80,14 @@ class UnflattenerUtil {
 	final void populate(Object object, String key, int suffixSize, Object value)
 	        throws IllegalAccessException, InvocationTargetException {
 		try {
-			PropertyUtils.setProperty(object, extractFieldName(key, suffixSize),
-			        value);
+			if (value instanceof EnumHolder) {
+				PropertyUtils.setProperty(object,
+				        extractFieldName(key, suffixSize),
+				        ((EnumHolder) value).getValue());
+			} else {
+				PropertyUtils.setProperty(object,
+				        extractFieldName(key, suffixSize), value);
+			}
 		} catch (final NoSuchMethodException e) {
 			LOGGER.warn(e.getMessage(), e);
 		}

@@ -1,5 +1,10 @@
 package org.beanone.flattener.api;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +30,13 @@ public class TypeNameAbbretionMap {
 		add("C", Character.class);
 		add("S", String.class);
 		add("T", Class.class);
+		add("BI", BigInteger.class);
+		add("BD", BigDecimal.class);
+
+		add("d", Date.class);
+		add("sd", java.sql.Date.class);
+		add("t", Time.class);
+		add("ts", Timestamp.class);
 	}
 
 	public void add(String abbr, Class<?> clazz) {

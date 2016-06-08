@@ -1,6 +1,11 @@
 package org.beanone.flattener;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -13,6 +18,10 @@ import org.beanone.flattener.api.PrimitiveValueRegistry;
 import org.beanone.flattener.api.Unflattener;
 import org.beanone.flattener.api.UnflattenerResolver;
 import org.beanone.flattener.api.ValueConverter;
+import org.beanone.flattener.converter.SqlDateConverter;
+import org.beanone.flattener.converter.SqlTimeConverter;
+import org.beanone.flattener.converter.TimestampConverter;
+import org.beanone.flattener.converter.UtilDateConverter;
 
 class FlattenerRegistryImpl implements FlattenerRegistry {
 	private final Map<FlattenerResolver, Flattener> flatteners = new HashMap<>();
@@ -50,31 +59,17 @@ class FlattenerRegistryImpl implements FlattenerRegistry {
 		valueTypeRegistry.register(Character.class, v -> v.charAt(0));
 		valueTypeRegistry.register(String.class, v -> v);
 		valueTypeRegistry.register(Class.class, UnflattenerUtil::classValueOf);
-
-		try {
-			valueTypeRegistry.register(ClassUtils.getClass("int"),
-			        Integer::valueOf);
-			valueTypeRegistry.register(ClassUtils.getClass("long"),
-			        Long::valueOf);
-			valueTypeRegistry.register(ClassUtils.getClass("double"),
-			        Double::valueOf);
-			valueTypeRegistry.register(ClassUtils.getClass("float"),
-			        Float::valueOf);
-			valueTypeRegistry.register(ClassUtils.getClass("short"),
-			        Short::valueOf);
-			valueTypeRegistry.register(ClassUtils.getClass("byte"),
-			        Byte::valueOf);
-			valueTypeRegistry.register(ClassUtils.getClass("boolean"),
-			        Boolean::valueOf);
-			valueTypeRegistry.register(ClassUtils.getClass("char"),
-			        v -> v.charAt(0));
-		} catch (final ClassNotFoundException e) {
-			throw new FlattenerException(e);
-		}
+		valueTypeRegistry.register(Date.class, new UtilDateConverter());
+		valueTypeRegistry.register(java.sql.Date.class, new SqlDateConverter());
+		valueTypeRegistry.register(Time.class, new SqlTimeConverter());
+		valueTypeRegistry.register(Timestamp.class, new TimestampConverter());
+		valueTypeRegistry.register(BigInteger.class, v -> new BigInteger(v));
+		valueTypeRegistry.register(BigDecimal.class, v -> new BigDecimal(v));
 	}
 
+	@SuppressWarnings({ "rawtypes" })
 	@Override
-	public ValueConverter<?> findConverter(Object value) {
+	public ValueConverter findConverter(Object value) {
 		return getValueTypeRegistry().getConverter(value.getClass());
 	}
 

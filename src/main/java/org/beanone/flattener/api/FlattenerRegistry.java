@@ -7,7 +7,8 @@ package org.beanone.flattener.api;
  *
  */
 public interface FlattenerRegistry {
-	ValueConverter<?> findConverter(Object value);
+	@SuppressWarnings("rawtypes")
+	ValueConverter findConverter(Object value);
 
 	/**
 	 * Finds the {@link Flattener} for the passed in object value.

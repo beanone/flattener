@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Map;
 
+import org.beanone.flattener.exception.FlattenerException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;

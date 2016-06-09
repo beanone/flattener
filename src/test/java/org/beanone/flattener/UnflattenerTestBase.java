@@ -9,7 +9,7 @@ import org.junit.Assert;
 public abstract class UnflattenerTestBase {
 	protected abstract Flattener createFlattener();
 
-	protected abstract Unflattener createUnflattener();
+	protected abstract AbstractUnflattener createUnflattener();
 
 	protected void test(Object object) throws Exception {
 		final Flattener flattener = createFlattener();

@@ -3,6 +3,7 @@ package org.beanone.flattener;
 import java.lang.reflect.Field;
 
 import org.beanone.flattener.api.FlattenerRegistry;
+import org.beanone.flattener.exception.FlattenerException;
 
 /**
  * Flattener for any java bean that does not have a registered Flattener.

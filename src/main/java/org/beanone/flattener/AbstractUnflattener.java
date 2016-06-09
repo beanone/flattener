@@ -11,6 +11,7 @@ import java.util.Map;
 import org.beanone.flattener.api.FlattenerRegistry;
 import org.beanone.flattener.api.KeyStack;
 import org.beanone.flattener.api.Unflattener;
+import org.beanone.flattener.exception.FlattenerException;
 
 /**
  * Abstraction implementation of Flattener.
@@ -21,14 +22,14 @@ import org.beanone.flattener.api.Unflattener;
 public abstract class AbstractUnflattener implements Unflattener {
 	private final Map<String, Object> beanRefs = new HashMap<>();
 	private final FlattenerRegistry flattenerRegistry;
-	private final UnflattenerUtil util;
+	private final FlattenerUtil util;
 
 	protected AbstractUnflattener(FlattenerRegistry flattenerRegistry) {
 		if (flattenerRegistry == null) {
 			throw new IllegalArgumentException("FlattenerRegistry is null!");
 		}
 		this.flattenerRegistry = flattenerRegistry;
-		util = new UnflattenerUtil(flattenerRegistry);
+		util = new FlattenerUtil();
 	}
 
 	@Override
@@ -64,8 +65,8 @@ public abstract class AbstractUnflattener implements Unflattener {
 				} else {
 					keyStack.pop();
 					final String typedValueStr = flatted.get(key);
-					final Object value = getUtil()
-					        .readPrimitiveValue(typedValueStr);
+					final Object value = getFlattenerRegistry()
+					        .parsePrimitive(typedValueStr);
 					doPopulate(object, key, 0, value);
 				}
 			}
@@ -85,7 +86,7 @@ public abstract class AbstractUnflattener implements Unflattener {
 	        int suffixSize, Object value)
 	        throws IllegalAccessException, InvocationTargetException;
 
-	protected final UnflattenerUtil getUtil() {
+	protected final FlattenerUtil getUtil() {
 		return util;
 	}
 }

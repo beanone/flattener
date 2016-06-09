@@ -1,7 +1,6 @@
 package org.beanone.flattener;
 
 import org.beanone.flattener.api.Flattener;
-import org.beanone.flattener.api.Unflattener;
 import org.junit.Test;
 
 public class ArrayUnflattenerTest extends UnflattenerTestBase {
@@ -30,7 +29,7 @@ public class ArrayUnflattenerTest extends UnflattenerTestBase {
 	}
 
 	@Override
-	protected Unflattener createUnflattener() {
+	protected AbstractUnflattener createUnflattener() {
 		return new ArrayUnflattener(new FlattenerRegistryImpl());
 	}
 }

@@ -22,6 +22,10 @@ public class FlattenerTool {
 		return sortIfNeeded(flattener.flat(object, ""));
 	}
 
+	public Object parsePrimitive(String typedValueStr) {
+		return getFlattenerRegistry().parsePrimitive(typedValueStr);
+	}
+
 	public FlattenerTool registerConverter(Class<?> clazz,
 	        ValueConverter<?> converter, String abbr) {
 		TypeNameAbbretionMap.getInstance().add(abbr, clazz);

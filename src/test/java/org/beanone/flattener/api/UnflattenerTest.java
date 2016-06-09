@@ -3,7 +3,7 @@ package org.beanone.flattener.api;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.beanone.flattener.FlattenerException;
+import org.beanone.flattener.exception.FlattenerException;
 import org.junit.Assert;
 import org.junit.Test;
 

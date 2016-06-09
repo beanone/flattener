@@ -78,6 +78,12 @@ public class FlattenerToolTest {
 	}
 
 	@Test
+	public void testReadPrimitiveValue() {
+		final FlattenerTool tool = new FlattenerTool();
+		Assert.assertEquals(10, tool.parsePrimitive("I,10"));
+	}
+
+	@Test
 	public void testRegisterClassOfQValueConverterOfQ() {
 		final FlattenerTool tool = new FlattenerTool().registerConverter(
 		        ColorEnum.class, v -> ColorEnum.valueOf(v), "O");

@@ -42,27 +42,32 @@ public class NaturalComparator implements Comparator<String> {
 		final int i1 = parseIntNumer(o1);
 		final int i2 = parseIntNumer(o2);
 		if (i1 == i2) {
-			final String s1 = removeNumberFromHead(o1);
-			final String s2 = removeNumberFromHead(o2);
-			if (s1 == null && s2 == null) {
-				// both strings are pure numeric and they are equal but prefixed
-				// with different numbers of 0.
-				return compareString(o1, o2, preference);
-			}
-			if (s1 == null) {
-				// o1 is just number but o2 has more after the number
-				return -1;
-			} else if (s2 == null) {
-				// o2 is just number but o1 has more after the number
-				return 1;
-			}
-
-			final int newPreference = o1.substring(0, o1.indexOf(s1))
-			        .compareTo(o2.substring(0, o2.indexOf(s2)));
-			return compare(s1, s2, newPreference);
+			return compareStringRemovePrefixingNumbers(o1, o2, preference);
 		} else {
 			return i1 - i2;
 		}
+	}
+
+	private int compareStringRemovePrefixingNumbers(String o1, String o2,
+	        int preference) {
+		final String s1 = removeNumberFromHead(o1);
+		final String s2 = removeNumberFromHead(o2);
+		if (s1 == null && s2 == null) {
+			// both strings are pure numeric and they are equal but prefixed
+			// with different numbers of 0.
+			return compareString(o1, o2, preference);
+		}
+		if (s1 == null) {
+			// o1 is just number but o2 has more after the number
+			return -1;
+		} else if (s2 == null) {
+			// o2 is just number but o1 has more after the number
+			return 1;
+		}
+
+		final int newPreference = o1.substring(0, o1.indexOf(s1))
+		        .compareTo(o2.substring(0, o2.indexOf(s2)));
+		return compare(s1, s2, newPreference);
 	}
 
 	private int compareString(String s1, String s2, int prefer) {

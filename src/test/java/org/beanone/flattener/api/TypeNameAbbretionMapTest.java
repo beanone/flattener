@@ -1,6 +1,5 @@
 package org.beanone.flattener.api;
 
-import org.beanone.flattener.api.TypeNameAbbretionMap;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -16,6 +15,11 @@ public class TypeNameAbbretionMapTest {
 	@Test
 	public void testAddWithAbbreviationNotYetTaken() {
 		TypeNameAbbretionMap.getInstance().add("X", Object.class);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testAddWithClassAlreadyMapped() {
+		TypeNameAbbretionMap.getInstance().add(".", Integer.class);
 	}
 
 	@Test

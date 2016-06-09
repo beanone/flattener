@@ -6,7 +6,7 @@
 
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>A utility library that allows one to turn a JavaBean into a flat Map of attributes</description>
-	<url>https://github.com/hongyan99/beanmap</url>
+	<url>https://github.com/hongyan99/flattener</url>
 
 	<licenses>
 		<license>
@@ -17,9 +17,9 @@
 	</licenses>
 
 	<scm>
-		<connection>git@github.com:hongyan99/beanmap.git</connection>
-		<developerConnection>git@github.com:hongyan99/beanmap.git</developerConnection>
-		<url>https://github.com/hongyan99/beanmap.git</url>
+		<connection>git@github.com:hongyan99/flattener.git</connection>
+		<developerConnection>git@github.com:hongyan99/flattener.git</developerConnection>
+		<url>https://github.com/hongyan99/flattener.git</url>
 	</scm>
 
 	<properties>
@@ -229,6 +229,6 @@
 	</profiles>
 
 	<issueManagement>
-		<url>https://github.com/hongyan99/beanmap/issues</url>
+		<url>https://github.com/hongyan99/flattener/issues</url>
 	</issueManagement>
 </project>

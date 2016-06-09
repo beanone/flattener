@@ -10,41 +10,64 @@ public class NaturalComparatorTest {
 
 	@Test
 	public void testCompareNumericString() {
-		Assert.assertEquals(-1, comparator.compare("01234", "1234"));
-		Assert.assertTrue(comparator.compare("1234", "2") > 0);
-		Assert.assertTrue(comparator.compare("2", "123") < 0);
-		Assert.assertEquals(1, comparator.compare("1234", "01234"));
+		assertNegative(comparator.compare("01234", "1234"));
+		assertPositive(comparator.compare("1234", "2"));
+		assertNegative(comparator.compare("2", "123"));
+		assertPositive(comparator.compare("1234", "01234"));
 		Assert.assertEquals(0, comparator.compare("01234", "01234"));
 		Assert.assertEquals(0, comparator.compare("1234", "1234"));
 	}
 
 	@Test
 	public void testCompareNumericWithMixed() {
-		Assert.assertEquals(-1, comparator.compare("01234", "01234abc"));
-		Assert.assertTrue(comparator.compare("1234", "2abc") > 0);
-		Assert.assertTrue(comparator.compare("2", "123abc") < 0);
-		Assert.assertEquals(-1, comparator.compare("1234", "01234abc"));
-		Assert.assertEquals(-1, comparator.compare("01234", "1234abc"));
-		Assert.assertEquals(-1, comparator.compare("01234abc", "01234"));
-		Assert.assertEquals(-1, comparator.compare("1234abc", "01234"));
-		Assert.assertEquals(-1, comparator.compare("01234abc", "1234"));
+		assertNegative(comparator.compare("01234", "01234abc"));
+		assertPositive(comparator.compare("1234", "2abc"));
+		assertNegative(comparator.compare("2", "123abc"));
+		assertNegative(comparator.compare("1234", "01234abc"));
+		assertNegative(comparator.compare("01234", "1234abc"));
+		assertPositive(comparator.compare("01234abc", "01234"));
+		assertPositive(comparator.compare("1234abc", "01234"));
+		assertPositive(comparator.compare("01234abc", "1234"));
+		assertPositive(comparator.compare("1234abc", "1234"));
+		assertNegative(comparator.compare("2abc", "1234"));
 	}
 
 	@Test
 	public void testCompareNumericWithNoneNumeric() {
-		Assert.assertEquals(-1, comparator.compare("01234", "abc"));
-		Assert.assertEquals(-1, comparator.compare("1234", "abc"));
-		Assert.assertEquals(1, comparator.compare("abc", "01234"));
+		Assert.assertTrue(comparator.compare("01234", "abc") < 0);
+		Assert.assertTrue(comparator.compare("1234", "abc") < 0);
+		Assert.assertTrue(comparator.compare("abc", "01234") > 0);
+	}
+
+	@Test
+	public void testComparePureStrings() {
+		assertNegative(comparator.compare("abcdef", "abcdefg"));
+		assertPositive(comparator.compare("abcdefg", "abcdef"));
+		Assert.assertEquals(0, comparator.compare("abcdef", "abcdef"));
+	}
+
+	@Test
+	public void testCompareWithNullArguments() {
+		assertNegative(comparator.compare(null, ""));
+		assertPositive(comparator.compare("", null));
+		Assert.assertEquals(0, comparator.compare(null, null));
 	}
 
 	@Test
 	public void testMixedWithMixed() {
-		Assert.assertEquals(-1,
-		        comparator.compare("abc01234def", "abc1234def"));
-		Assert.assertEquals(1, comparator.compare("abc1234def", "abc01234def"));
-		Assert.assertTrue(comparator.compare("abc1234def", "abc2def") > 0);
-		Assert.assertTrue(comparator.compare("abc2def", "abc1234def") < 0);
+		assertNegative(comparator.compare("abc01234def", "abc1234def"));
+		assertPositive(comparator.compare("abc1234def", "abc01234def"));
+		assertPositive(comparator.compare("abc1234def", "abc2def"));
+		assertNegative(comparator.compare("abc2def", "abc1234def"));
 		Assert.assertEquals(0, comparator.compare("abc01234", "abc01234"));
 		Assert.assertEquals(0, comparator.compare("abc1234", "abc1234"));
+	}
+
+	private void assertNegative(int i) {
+		Assert.assertTrue(i < 0);
+	}
+
+	private void assertPositive(int i) {
+		Assert.assertTrue(i > 0);
 	}
 }

@@ -9,16 +9,14 @@ public class NaturalComparator implements Comparator<String> {
 	}
 
 	public int compare(String o1, String o2, int preference) {
-		if (o1 == null && o2 == null) {
-			return 0;
-		} else if (o1 == null && o2 != null) {
-			return -1;
-		} else if (o2 == null && o1 != null) {
+		if (o1 == null) {
+			return o2 == null ? 0 : -1;
+		} else if (o2 == null) {
 			return 1;
 		}
 
 		for (int i = 0; i < o1.length(); i++) {
-			if (o1.length() == i) {
+			if (o2.length() == i) {
 				// o2 is shorter but same as the beginning of o1
 				return 1;
 			}
@@ -26,7 +24,8 @@ public class NaturalComparator implements Comparator<String> {
 			        && Character.isDigit(o2.charAt(i))) {
 				// compare in numeric mode for o1 and o2 the same until the
 				// numeric part of the string
-				return compareNumeric(o1.substring(i), o2.substring(i), preference);
+				return compareNumeric(o1.substring(i), o2.substring(i),
+				        preference);
 			}
 			if (o1.charAt(i) != o2.charAt(i)) {
 				// compare in alpha mode (single character as string)
@@ -36,12 +35,12 @@ public class NaturalComparator implements Comparator<String> {
 		}
 
 		// o1 is shorter but same as the beginning of o2
-		return -1;
+		return o1.length() == o2.length() ? preference : -1;
 	}
 
 	private int compareNumeric(String o1, String o2, int preference) {
-		final int i1 = Integer.parseInt(o1);
-		final int i2 = Integer.parseInt(o2);
+		final int i1 = parseIntNumer(o1);
+		final int i2 = parseIntNumer(o2);
 		if (i1 == i2) {
 			final String s1 = removeNumberFromHead(o1);
 			final String s2 = removeNumberFromHead(o2);
@@ -58,9 +57,8 @@ public class NaturalComparator implements Comparator<String> {
 				return 1;
 			}
 
-			final int i = o1.substring(0, o1.indexOf(s1))
+			final int newPreference = o1.substring(0, o1.indexOf(s1))
 			        .compareTo(o2.substring(0, o2.indexOf(s2)));
-			final int newPreference = i == 0 ? preference : i;
 			return compare(s1, s2, newPreference);
 		} else {
 			return i1 - i2;
@@ -70,6 +68,16 @@ public class NaturalComparator implements Comparator<String> {
 	private int compareString(String s1, String s2, int prefer) {
 		final int returns = s1.compareTo(s2);
 		return returns == 0 ? prefer : returns;
+	}
+
+	private int parseIntNumer(String s) {
+		for (int i = 0; i < s.length(); i++) {
+			if (!Character.isDigit(s.charAt(i))) {
+				return Integer.parseInt(s.substring(0, i));
+			}
+		}
+
+		return Integer.parseInt(s);
 	}
 
 	private String removeNumberFromHead(String s) {

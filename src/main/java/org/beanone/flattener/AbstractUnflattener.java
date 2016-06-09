@@ -4,7 +4,6 @@ import static org.beanone.flattener.FlattenerContants.CTYPE_SUFFIX;
 import static org.beanone.flattener.FlattenerContants.REF_SUFFIX;
 import static org.beanone.flattener.FlattenerContants.SIZE_SUFFIX;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -71,20 +70,17 @@ public abstract class AbstractUnflattener implements Unflattener {
 				}
 			}
 			return object;
-		} catch (InstantiationException | IllegalAccessException
-		        | InvocationTargetException | ClassNotFoundException e) {
+		} catch (final ReflectiveOperationException e) {
 			throw new FlattenerException(e);
 		}
 	}
 
 	protected abstract Object doCreateObject(Map<String, String> flatted,
 	        KeyStack keyStack, Class<?> clazz)
-	        throws InstantiationException, IllegalAccessException,
-	        InvocationTargetException, ClassNotFoundException;
+	        throws ReflectiveOperationException;
 
 	protected abstract void doPopulate(Object object, String key,
-	        int suffixSize, Object value)
-	        throws IllegalAccessException, InvocationTargetException;
+	        int suffixSize, Object value) throws ReflectiveOperationException;
 
 	protected final FlattenerUtil getUtil() {
 		return util;

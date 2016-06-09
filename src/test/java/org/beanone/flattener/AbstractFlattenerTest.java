@@ -45,7 +45,10 @@ public class AbstractFlattenerTest {
 	public void testFlatOfNullObject() {
 		final MockFlattener flattener = new MockFlattener(
 		        new FlattenerRegistryImpl());
-		final Map<String, String> map = flattener.flat(null);
+		Map<String, String> map = flattener.flat(null);
+		Assert.assertNotNull(map);
+		Assert.assertTrue(map.isEmpty());
+		map = flattener.flat(null, "");
 		Assert.assertNotNull(map);
 		Assert.assertTrue(map.isEmpty());
 	}

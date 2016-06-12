@@ -28,12 +28,21 @@ public abstract class AbstractUnflattener implements Unflattener {
 			throw new IllegalArgumentException("FlattenerRegistry is null!");
 		}
 		this.flattenerRegistry = flattenerRegistry;
-		util = new FlattenerUtil();
+		this.util = new FlattenerUtil();
 	}
 
 	@Override
 	public final FlattenerRegistry getFlattenerRegistry() {
-		return flattenerRegistry;
+		return this.flattenerRegistry;
+	}
+
+	@Override
+	public Object unflat(Map<String, String> flattened) {
+		try {
+			return Unflattener.super.unflat(flattened);
+		} finally {
+			this.beanRefs.clear();
+		}
 	}
 
 	@Override
@@ -44,7 +53,7 @@ public abstract class AbstractUnflattener implements Unflattener {
 			final String prefix = classKey.substring(0,
 			        classKey.length() - CTYPE_SUFFIX.length());
 			final Object object = doCreateObject(flatted, keyStack, clazz);
-			beanRefs.put(prefix, object);
+			this.beanRefs.put(prefix, object);
 			while (!keyStack.isEmpty()) {
 				final String key = keyStack.peek();
 				if (!key.startsWith(prefix)) {
@@ -59,7 +68,7 @@ public abstract class AbstractUnflattener implements Unflattener {
 				} else if (key.endsWith(REF_SUFFIX)) {
 					keyStack.pop();
 					final String refObjectKey = flatted.get(key);
-					final Object value = beanRefs.get(refObjectKey);
+					final Object value = this.beanRefs.get(refObjectKey);
 					doPopulate(object, key, REF_SUFFIX.length(), value);
 				} else {
 					keyStack.pop();
@@ -83,6 +92,6 @@ public abstract class AbstractUnflattener implements Unflattener {
 	        int suffixSize, Object value) throws ReflectiveOperationException;
 
 	protected final FlattenerUtil getUtil() {
-		return util;
+		return this.util;
 	}
 }

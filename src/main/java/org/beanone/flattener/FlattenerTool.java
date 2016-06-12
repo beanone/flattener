@@ -19,7 +19,7 @@ public class FlattenerTool {
 	public Map<String, String> flat(Object object) {
 		final Flattener flattener = getFlattenerRegistry()
 		        .findFlattener(object);
-		return sortIfNeeded(flattener.flat(object, ""));
+		return sortIfNeeded(flattener.flat(object));
 	}
 
 	public Object parsePrimitive(String typedValueStr) {
@@ -67,13 +67,13 @@ public class FlattenerTool {
 		return this;
 	}
 
-	private FlattenerRegistry getFlattenerRegistry() {
-		return flattenerRegistry;
-	}
-
 	private Map<String, String> sortIfNeeded(Map<String, String> flat) {
-		final Map<String, String> returns = new TreeMap<>(sortBy);
+		final Map<String, String> returns = new TreeMap<>(this.sortBy);
 		returns.putAll(flat);
 		return returns;
+	}
+
+	FlattenerRegistry getFlattenerRegistry() {
+		return this.flattenerRegistry;
 	}
 }

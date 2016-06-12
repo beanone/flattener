@@ -30,6 +30,15 @@ public abstract class AbstractFlattener implements Flattener {
 	}
 
 	@Override
+	public Map<String, String> flat(Object object) {
+		try {
+			return Flattener.super.flat(object);
+		} finally {
+			this.valueRefs.clear();
+		}
+	}
+
+	@Override
 	public Map<String, String> flat(Object object, String prefix) {
 		final Map<String, String> returns = new HashMap<>();
 		if (object != null) {
@@ -48,8 +57,10 @@ public abstract class AbstractFlattener implements Flattener {
 				if (converter != null) {
 					// for registered primitive value types (type that can
 			        // convert to from string)
-			        // because of type erasure in Java, the type information of
-			        // a value must be stored or we can't determine what type of
+			        // because of type erasure in Java, the type information
+			        // of
+			        // a value must be stored or we can't determine what
+			        // type of
 			        // value to convert to from the stored string.
 					returns.put(fullKey,
 			                renderValueType ? converter.toTypedString(value)
@@ -67,7 +78,6 @@ public abstract class AbstractFlattener implements Flattener {
 				}
 			});
 		}
-		this.valueRefs.clear();
 		return returns;
 	}
 

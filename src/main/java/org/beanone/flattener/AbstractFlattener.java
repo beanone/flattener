@@ -35,7 +35,7 @@ public abstract class AbstractFlattener implements Flattener {
 		if (object != null) {
 			// save the reference so that we don't flatten the same
 			// again in the graph
-			valueRefs.put(object, removeLastDot(prefix));
+			this.valueRefs.put(object, removeLastDot(prefix));
 			returns.put(createFullKey(prefix, CTYPE_SUFFIX),
 			        object.getClass().getName());
 			doFlat(object, (key, value, renderValueType) -> {
@@ -54,9 +54,10 @@ public abstract class AbstractFlattener implements Flattener {
 					returns.put(fullKey,
 			                renderValueType ? converter.toTypedString(value)
 			                        : converter.toString(value));
-				} else if (valueRefs.containsKey(value)) {
+				} else if (this.valueRefs.containsKey(value)) {
 					// already processed values - to avoid cyclic issues
-					returns.put(fullKey + REF_SUFFIX, valueRefs.get(value));
+					returns.put(fullKey + REF_SUFFIX,
+			                this.valueRefs.get(value));
 				} else {
 					// flatten the value
 					final Flattener mapper = getFlattenerRegistry()
@@ -66,12 +67,13 @@ public abstract class AbstractFlattener implements Flattener {
 				}
 			});
 		}
+		this.valueRefs.clear();
 		return returns;
 	}
 
 	@Override
 	public FlattenerRegistry getFlattenerRegistry() {
-		return flattenerRegistry;
+		return this.flattenerRegistry;
 	}
 
 	private String createFullKey(String prefix, String key) {

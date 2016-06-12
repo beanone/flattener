@@ -26,6 +26,16 @@ public class FlattenerTool {
 		return getFlattenerRegistry().parsePrimitive(typedValueStr);
 	}
 
+	/**
+	 * Print the Object attributes.
+	 *
+	 * @param object
+	 *            the bean object whose attributes are to be printed.
+	 */
+	public void print(Object object) {
+		flat(object).forEach((k, v) -> System.out.println(k + "=" + v));
+	}
+
 	public FlattenerTool registerConverter(Class<?> clazz,
 	        ValueConverter<?> converter, String abbr) {
 		TypeNameAbbretionMap.getInstance().add(abbr, clazz);

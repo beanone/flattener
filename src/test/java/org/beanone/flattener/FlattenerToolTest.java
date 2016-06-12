@@ -78,6 +78,13 @@ public class FlattenerToolTest {
 	}
 
 	@Test
+	public void testPrint() {
+		final FlattenerTool tool = new FlattenerTool();
+		tool.print(new Object());
+		tool.print("");
+	}
+
+	@Test
 	public void testReadPrimitiveValue() {
 		final FlattenerTool tool = new FlattenerTool();
 		Assert.assertEquals(10, tool.parsePrimitive("I,10"));

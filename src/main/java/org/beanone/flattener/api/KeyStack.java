@@ -1,7 +1,9 @@
 package org.beanone.flattener.api;
 
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Deque;
+import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -12,6 +14,18 @@ import java.util.Stack;
  *
  */
 public class KeyStack {
+	public static KeyStack create(Set<String> keys) {
+		final KeyStack keyStack = new KeyStack();
+		keys.forEach(keyStack::push);
+		return keyStack;
+	}
+
+	public static KeyStack create(String[] keys) {
+		final KeyStack keyStack = new KeyStack();
+		Arrays.asList(keys).forEach(keyStack::push);
+		return keyStack;
+	}
+
 	private final Deque<String> data = new ArrayDeque<>();
 
 	public boolean isEmpty() {

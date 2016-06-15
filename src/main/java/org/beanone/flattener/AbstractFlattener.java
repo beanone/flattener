@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.beanone.flattener.api.Flattener;
+import org.beanone.flattener.api.FlattenerCallback;
 import org.beanone.flattener.api.FlattenerRegistry;
 import org.beanone.flattener.api.ValueConverter;
 
@@ -39,7 +40,8 @@ public abstract class AbstractFlattener implements Flattener {
 	}
 
 	@Override
-	public Map<String, String> flat(Object object, String prefix) {
+	public Map<String, String> flat(Object object, String prefix,
+	        FlattenerCallback callback) {
 		final Map<String, String> returns = new HashMap<>();
 		if (object != null) {
 			// save the reference so that we don't flatten the same
@@ -62,19 +64,20 @@ public abstract class AbstractFlattener implements Flattener {
 			        // a value must be stored or we can't determine what
 			        // type of
 			        // value to convert to from the stored string.
-					returns.put(fullKey,
+					addKeyValue(returns, fullKey,
 			                renderValueType ? converter.toTypedString(value)
-			                        : converter.toString(value));
+			                        : converter.toString(value),
+			                value, object, callback);
 				} else if (this.valueRefs.containsKey(value)) {
 					// already processed values - to avoid cyclic issues
-					returns.put(fullKey + REF_SUFFIX,
-			                this.valueRefs.get(value));
+					addKeyValue(returns, fullKey + REF_SUFFIX,
+			                this.valueRefs.get(value), value, object, callback);
 				} else {
 					// flatten the value
 					final Flattener mapper = getFlattenerRegistry()
 			                .findFlattener(value);
-					returns.putAll(
-			                mapper.flat(value, fullKey + ATTRIBUTE_SEPARATE));
+					returns.putAll(mapper.flat(value,
+			                fullKey + ATTRIBUTE_SEPARATE, callback));
 				}
 			});
 		}
@@ -84,6 +87,13 @@ public abstract class AbstractFlattener implements Flattener {
 	@Override
 	public FlattenerRegistry getFlattenerRegistry() {
 		return this.flattenerRegistry;
+	}
+
+	private void addKeyValue(Map<String, String> attributeMap, String key,
+	        String strVal, Object value, Object object,
+	        FlattenerCallback callback) {
+		attributeMap.put(key, strVal);
+		callback.callback(key, strVal, value, object);
 	}
 
 	private String createFullKey(String prefix, String key) {

@@ -14,7 +14,13 @@ import java.util.Map;
 @FunctionalInterface
 public interface Flattener {
 	default Map<String, String> flat(Object object) {
-		return getFlattenerRegistry().findFlattener(object).flat(object, "");
+		return flat(object, FlattenerCallback.DO_NOTHING);
+	}
+
+	default Map<String, String> flat(Object object,
+	        FlattenerCallback callback) {
+		return getFlattenerRegistry().findFlattener(object).flat(object, "",
+		        callback);
 	}
 
 	/**
@@ -24,9 +30,12 @@ public interface Flattener {
 	 *            a Java bean object.
 	 * @param prefix
 	 *            the String to prefix every key
+	 * @param callback
+	 *            TODO
 	 * @return a {@link Map} of String to String.
 	 */
-	Map<String, String> flat(Object object, String prefix);
+	Map<String, String> flat(Object object, String prefix,
+	        FlattenerCallback callback);
 
 	default FlattenerRegistry getFlattenerRegistry() {
 		throw new UnsupportedOperationException(

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.beanone.flattener.api.Flattener;
+import org.beanone.flattener.api.FlattenerCallback;
 import org.beanone.flattener.api.FlattenerRegistry;
 import org.beanone.flattener.api.FlattenerResolver;
 import org.beanone.flattener.api.TypeNameAbbretionMap;
@@ -20,6 +21,12 @@ public class FlattenerTool {
 		final Flattener flattener = getFlattenerRegistry()
 		        .findFlattener(object);
 		return sortIfNeeded(flattener.flat(object));
+	}
+
+	public Map<String, String> flat(Object object, FlattenerCallback callback) {
+		final Flattener flattener = getFlattenerRegistry()
+		        .findFlattener(object);
+		return sortIfNeeded(flattener.flat(object, callback));
 	}
 
 	public Object parsePrimitive(String typedValueStr) {

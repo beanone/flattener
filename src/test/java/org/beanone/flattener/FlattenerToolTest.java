@@ -2,8 +2,10 @@ package org.beanone.flattener;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.beanone.flattener.api.Flattener;
+import org.beanone.flattener.api.FlattenerCallback;
 import org.beanone.flattener.api.FlattenerRegistry;
 import org.beanone.flattener.api.KeyStack;
 import org.beanone.flattener.api.Unflattener;
@@ -54,6 +56,17 @@ public class FlattenerToolTest {
 	}
 
 	@Test
+	public void testFlatOfSimpleTestBeanWithFlattenerCallBack() {
+		final AtomicInteger count = new AtomicInteger();
+		Assert.assertNotNull(new FlattenerTool()
+		        .withSortStrategy((o1, o2) -> o1.compareTo(o2))
+		        .flat(new ComplexTestBean(), (k, v, vo, o) -> {
+			        count.incrementAndGet();
+		        }));
+		Assert.assertTrue(count.get() > 0);
+	}
+
+	@Test
 	public void testFlatOfSimpleTestBeanWitSortStrategy() {
 		Assert.assertNotNull(new FlattenerTool().flat(new ComplexTestBean()));
 	}
@@ -94,7 +107,8 @@ public class FlattenerToolTest {
 			}
 
 			@Override
-			public Map<String, String> flat(Object object, String prefix) {
+			public Map<String, String> flat(Object object, String prefix,
+			        FlattenerCallback callback) {
 				final Map<String, String> returns = new HashMap<>();
 				returns.put("a", "b");
 				return returns;

@@ -5,23 +5,23 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import org.beanone.flattener.api.KeyStack;
+import org.beanone.flattener.exception.FlattenerException;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class UnflattenerUtilTest {
-	private final UnflattenerUtil util = new UnflattenerUtil(
-	        new FlattenerRegistryImpl());
+public class FlattenerUtilTest {
+	private final FlattenerUtil util = new FlattenerUtil();
 
 	@Test
 	public void testClassValueOf() {
 		final Class<Integer> clazz = Integer.class;
 		Assert.assertEquals(clazz,
-		        UnflattenerUtil.classValueOf(clazz.toString()));
+		        FlattenerUtil.classValueOf(clazz.toString()));
 	}
 
 	@Test(expected = FlattenerException.class)
 	public void testClassValueOfWithClassNotFound() {
-		UnflattenerUtil.classValueOf("badname");
+		FlattenerUtil.classValueOf("badname");
 	}
 
 	@Test
@@ -102,19 +102,6 @@ public class UnflattenerUtilTest {
 		util.populate(bean, "noSetter", 0, "Hello");
 		Assert.assertEquals("Hello", bean.getWithSetter());
 		Assert.assertNull(bean.getNoSetter());
-	}
-
-	@Test
-	public void testReadPrimitiveValue() {
-		Assert.assertEquals(10, util.readPrimitiveValue("I,10"));
-		Assert.assertEquals(10.0, util.readPrimitiveValue("D,10"));
-		Assert.assertEquals(10.0F, util.readPrimitiveValue("F,10"));
-		Assert.assertEquals("AAA", util.readPrimitiveValue("S,AAA"));
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testUnflattenerUtil() {
-		new UnflattenerUtil(null);
 	}
 
 	private <T> void testCreateObject(Class<T> clazz) throws Exception {

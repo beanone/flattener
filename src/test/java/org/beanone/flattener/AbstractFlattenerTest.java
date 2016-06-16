@@ -2,6 +2,7 @@ package org.beanone.flattener;
 
 import java.util.Map;
 
+import org.beanone.flattener.api.FlattenerCallback;
 import org.beanone.flattener.api.FlattenerRegistry;
 import org.junit.Assert;
 import org.junit.Test;
@@ -12,11 +13,11 @@ public class AbstractFlattenerTest {
 		private MockBean self;
 
 		public MockBean getSelf() {
-			return self;
+			return this.self;
 		}
 
 		public Object getValue() {
-			return value;
+			return this.value;
 		}
 
 		public void setSelf(MockBean self) {
@@ -41,13 +42,21 @@ public class AbstractFlattenerTest {
 		}
 	}
 
+	@Test
+	public void testFlatObjectPrefixOfNullObject() {
+		final MockFlattener flattener = new MockFlattener(
+		        new FlattenerRegistryImpl());
+		final Map<String, String> map = flattener.flat(null, "",
+		        FlattenerCallback.DO_NOTHING);
+		Assert.assertNotNull(map);
+		Assert.assertTrue(map.isEmpty());
+	}
+
 	@Test(expected = NullPointerException.class)
 	public void testFlatOfNullObject() {
 		final MockFlattener flattener = new MockFlattener(
 		        new FlattenerRegistryImpl());
-		final Map<String, String> map = flattener.flat(null);
-		Assert.assertNotNull(map);
-		Assert.assertTrue(map.isEmpty());
+		flattener.flat(null);
 	}
 
 	@Test

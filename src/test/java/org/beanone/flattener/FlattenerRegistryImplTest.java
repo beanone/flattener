@@ -140,6 +140,14 @@ public class FlattenerRegistryImplTest {
 	}
 
 	@Test
+	public void testReadPrimitiveValue() {
+		Assert.assertEquals(10, flattenerRegistry.parsePrimitive("I,10"));
+		Assert.assertEquals(10.0, flattenerRegistry.parsePrimitive("D,10"));
+		Assert.assertEquals(10.0F, flattenerRegistry.parsePrimitive("F,10"));
+		Assert.assertEquals("AAA", flattenerRegistry.parsePrimitive("S,AAA"));
+	}
+
+	@Test
 	public void testRegisterFlattener() {
 		flattenerRegistry.registerFlattener(v -> false,
 		        new DefaultFlattener(new FlattenerRegistryImpl()));

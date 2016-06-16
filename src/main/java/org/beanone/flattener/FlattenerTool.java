@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.beanone.flattener.api.Flattener;
+import org.beanone.flattener.api.FlattenerCallback;
 import org.beanone.flattener.api.FlattenerRegistry;
 import org.beanone.flattener.api.FlattenerResolver;
 import org.beanone.flattener.api.TypeNameAbbretionMap;
@@ -19,7 +20,27 @@ public class FlattenerTool {
 	public Map<String, String> flat(Object object) {
 		final Flattener flattener = getFlattenerRegistry()
 		        .findFlattener(object);
-		return sortIfNeeded(flattener.flat(object, ""));
+		return sortIfNeeded(flattener.flat(object));
+	}
+
+	public Map<String, String> flat(Object object, FlattenerCallback callback) {
+		final Flattener flattener = getFlattenerRegistry()
+		        .findFlattener(object);
+		return sortIfNeeded(flattener.flat(object, callback));
+	}
+
+	public Object parsePrimitive(String typedValueStr) {
+		return getFlattenerRegistry().parsePrimitive(typedValueStr);
+	}
+
+	/**
+	 * Print the Object attributes.
+	 *
+	 * @param object
+	 *            the bean object whose attributes are to be printed.
+	 */
+	public void print(Object object) {
+		flat(object).forEach((k, v) -> System.out.println(k + "=" + v));
 	}
 
 	public FlattenerTool registerConverter(Class<?> clazz,
@@ -53,13 +74,13 @@ public class FlattenerTool {
 		return this;
 	}
 
-	private FlattenerRegistry getFlattenerRegistry() {
-		return flattenerRegistry;
-	}
-
 	private Map<String, String> sortIfNeeded(Map<String, String> flat) {
-		final Map<String, String> returns = new TreeMap<>(sortBy);
+		final Map<String, String> returns = new TreeMap<>(this.sortBy);
 		returns.putAll(flat);
 		return returns;
+	}
+
+	FlattenerRegistry getFlattenerRegistry() {
+		return this.flattenerRegistry;
 	}
 }

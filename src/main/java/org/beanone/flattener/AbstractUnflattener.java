@@ -4,13 +4,13 @@ import static org.beanone.flattener.FlattenerContants.CTYPE_SUFFIX;
 import static org.beanone.flattener.FlattenerContants.REF_SUFFIX;
 import static org.beanone.flattener.FlattenerContants.SIZE_SUFFIX;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.beanone.flattener.api.FlattenerRegistry;
 import org.beanone.flattener.api.KeyStack;
 import org.beanone.flattener.api.Unflattener;
+import org.beanone.flattener.exception.FlattenerException;
 
 /**
  * Abstraction implementation of Flattener.
@@ -21,19 +21,28 @@ import org.beanone.flattener.api.Unflattener;
 public abstract class AbstractUnflattener implements Unflattener {
 	private final Map<String, Object> beanRefs = new HashMap<>();
 	private final FlattenerRegistry flattenerRegistry;
-	private final UnflattenerUtil util;
+	private final FlattenerUtil util;
 
 	protected AbstractUnflattener(FlattenerRegistry flattenerRegistry) {
 		if (flattenerRegistry == null) {
 			throw new IllegalArgumentException("FlattenerRegistry is null!");
 		}
 		this.flattenerRegistry = flattenerRegistry;
-		util = new UnflattenerUtil(flattenerRegistry);
+		this.util = new FlattenerUtil();
 	}
 
 	@Override
 	public final FlattenerRegistry getFlattenerRegistry() {
-		return flattenerRegistry;
+		return this.flattenerRegistry;
+	}
+
+	@Override
+	public Object unflat(Map<String, String> flattened) {
+		try {
+			return Unflattener.super.unflat(flattened);
+		} finally {
+			this.beanRefs.clear();
+		}
 	}
 
 	@Override
@@ -44,7 +53,7 @@ public abstract class AbstractUnflattener implements Unflattener {
 			final String prefix = classKey.substring(0,
 			        classKey.length() - CTYPE_SUFFIX.length());
 			final Object object = doCreateObject(flatted, keyStack, clazz);
-			beanRefs.put(prefix, object);
+			this.beanRefs.put(prefix, object);
 			while (!keyStack.isEmpty()) {
 				final String key = keyStack.peek();
 				if (!key.startsWith(prefix)) {
@@ -59,33 +68,30 @@ public abstract class AbstractUnflattener implements Unflattener {
 				} else if (key.endsWith(REF_SUFFIX)) {
 					keyStack.pop();
 					final String refObjectKey = flatted.get(key);
-					final Object value = beanRefs.get(refObjectKey);
+					final Object value = this.beanRefs.get(refObjectKey);
 					doPopulate(object, key, REF_SUFFIX.length(), value);
 				} else {
 					keyStack.pop();
 					final String typedValueStr = flatted.get(key);
-					final Object value = getUtil()
-					        .readPrimitiveValue(typedValueStr);
+					final Object value = getFlattenerRegistry()
+					        .parsePrimitive(typedValueStr);
 					doPopulate(object, key, 0, value);
 				}
 			}
 			return object;
-		} catch (InstantiationException | IllegalAccessException
-		        | InvocationTargetException | ClassNotFoundException e) {
+		} catch (final ReflectiveOperationException e) {
 			throw new FlattenerException(e);
 		}
 	}
 
 	protected abstract Object doCreateObject(Map<String, String> flatted,
 	        KeyStack keyStack, Class<?> clazz)
-	        throws InstantiationException, IllegalAccessException,
-	        InvocationTargetException, ClassNotFoundException;
+	        throws ReflectiveOperationException;
 
 	protected abstract void doPopulate(Object object, String key,
-	        int suffixSize, Object value)
-	        throws IllegalAccessException, InvocationTargetException;
+	        int suffixSize, Object value) throws ReflectiveOperationException;
 
-	protected final UnflattenerUtil getUtil() {
-		return util;
+	protected final FlattenerUtil getUtil() {
+		return this.util;
 	}
 }

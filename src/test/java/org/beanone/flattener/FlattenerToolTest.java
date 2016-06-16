@@ -2,8 +2,10 @@ package org.beanone.flattener;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.beanone.flattener.api.Flattener;
+import org.beanone.flattener.api.FlattenerCallback;
 import org.beanone.flattener.api.FlattenerRegistry;
 import org.beanone.flattener.api.KeyStack;
 import org.beanone.flattener.api.Unflattener;
@@ -11,36 +13,17 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class FlattenerToolTest {
-	private class MockFlattener implements Flattener {
-		private final FlattenerRegistry flattenerRegistry;
-
-		public MockFlattener() {
-			flattenerRegistry = new FlattenerRegistryImpl();
-		}
-
-		@Override
-		public Map<String, String> flat(Object object, String prefix) {
-			final Map<String, String> returns = new HashMap<>();
-			returns.put("a", "b");
-			return returns;
-		}
-
-		@Override
-		public FlattenerRegistry getFlattenerRegistry() {
-			return flattenerRegistry;
-		}
-	}
 
 	private class MockUnflattener implements Unflattener {
 		private final FlattenerRegistry flattenerRegistry;
 
 		public MockUnflattener() {
-			flattenerRegistry = new FlattenerRegistryImpl();
+			this.flattenerRegistry = new FlattenerRegistryImpl();
 		}
 
 		@Override
 		public FlattenerRegistry getFlattenerRegistry() {
-			return flattenerRegistry;
+			return this.flattenerRegistry;
 		}
 
 		@Override
@@ -73,8 +56,32 @@ public class FlattenerToolTest {
 	}
 
 	@Test
+	public void testFlatOfSimpleTestBeanWithFlattenerCallBack() {
+		final AtomicInteger count = new AtomicInteger();
+		Assert.assertNotNull(new FlattenerTool()
+		        .withSortStrategy((o1, o2) -> o1.compareTo(o2))
+		        .flat(new ComplexTestBean(), (k, v, vo, o) -> {
+			        count.incrementAndGet();
+		        }));
+		Assert.assertTrue(count.get() > 0);
+	}
+
+	@Test
 	public void testFlatOfSimpleTestBeanWitSortStrategy() {
 		Assert.assertNotNull(new FlattenerTool().flat(new ComplexTestBean()));
+	}
+
+	@Test
+	public void testPrint() {
+		final FlattenerTool tool = new FlattenerTool();
+		tool.print(new Object());
+		tool.print("");
+	}
+
+	@Test
+	public void testReadPrimitiveValue() {
+		final FlattenerTool tool = new FlattenerTool();
+		Assert.assertEquals(10, tool.parsePrimitive("I,10"));
 	}
 
 	@Test
@@ -91,9 +98,29 @@ public class FlattenerToolTest {
 
 	@Test
 	public void testRegisterFlattenerResolverFlattener() {
+		final FlattenerTool tool = new FlattenerTool();
+		class MockFlattener implements Flattener {
+			private final FlattenerRegistry flattenerRegistry;
+
+			public MockFlattener() {
+				this.flattenerRegistry = tool.getFlattenerRegistry();
+			}
+
+			@Override
+			public Map<String, String> flat(Object object, String prefix,
+			        FlattenerCallback callback) {
+				final Map<String, String> returns = new HashMap<>();
+				returns.put("a", "b");
+				return returns;
+			}
+
+			@Override
+			public FlattenerRegistry getFlattenerRegistry() {
+				return this.flattenerRegistry;
+			}
+		}
 		final Object object = new Object();
-		final FlattenerTool tool = new FlattenerTool().registerFlattener(
-		        value -> value == object, new MockFlattener());
+		tool.registerFlattener(value -> value == object, new MockFlattener());
 		final Map<String, String> result = tool.flat(object);
 		Assert.assertNotNull(result);
 		Assert.assertEquals(1, result.size());

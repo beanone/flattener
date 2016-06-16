@@ -9,7 +9,7 @@ public class FlattenerTest {
 	public void testGetFlattenerRegistry() {
 		new Flattener() {
 			@Override
-			public Map<String, String> flat(Object object, String prefix) {
+			public Map<String, String> flat(Object object, String prefix, FlattenerCallback callback) {
 				return null;
 			}
 		}.getFlattenerRegistry();

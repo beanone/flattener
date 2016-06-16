@@ -23,6 +23,8 @@ public interface FlattenerRegistry {
 
 	PrimitiveValueRegistry getValueTypeRegistry();
 
+	Object parsePrimitive(String typedValueStr);
+
 	/**
 	 * Registers a {@link Flattener} for the passed in {@link FlattenerResolver}
 	 * .

@@ -63,7 +63,7 @@ public class MapUnflattenerTest extends UnflattenerTestBase {
 	}
 
 	@Override
-	protected Unflattener createUnflattener() {
+	protected AbstractUnflattener createUnflattener() {
 		return new MapUnflattener(new FlattenerRegistryImpl());
 	}
 }

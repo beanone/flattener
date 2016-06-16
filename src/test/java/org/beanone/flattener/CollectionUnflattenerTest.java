@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.beanone.flattener.api.Flattener;
-import org.beanone.flattener.api.Unflattener;
 import org.junit.Test;
 
 public class CollectionUnflattenerTest extends UnflattenerTestBase {
@@ -33,7 +32,7 @@ public class CollectionUnflattenerTest extends UnflattenerTestBase {
 	}
 
 	@Override
-	protected Unflattener createUnflattener() {
+	protected AbstractUnflattener createUnflattener() {
 		return new CollectionUnflattener(new FlattenerRegistryImpl());
 	}
 }

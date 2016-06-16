@@ -1,7 +1,6 @@
 package org.beanone.flattener;
 
 import static org.beanone.flattener.FlattenerContants.ATTRIBUTE_SEPARATE;
-import static org.beanone.flattener.FlattenerContants.TYPE_SEPARATE;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
@@ -9,16 +8,14 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.beanone.flattener.api.FlattenerRegistry;
 import org.beanone.flattener.api.KeyStack;
-import org.beanone.flattener.api.TypeNameAbbretionMap;
-import org.beanone.flattener.api.ValueConverter;
+import org.beanone.flattener.exception.FlattenerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class UnflattenerUtil {
+class FlattenerUtil {
 	private static final Logger LOGGER = LoggerFactory
-	        .getLogger(UnflattenerUtil.class);
+	        .getLogger(FlattenerUtil.class);
 
 	public static Class<?> classValueOf(String classToString) {
 		try {
@@ -30,19 +27,6 @@ class UnflattenerUtil {
 			throw new FlattenerException(e);
 		}
 
-	}
-
-	private final FlattenerRegistry flattenerRegistry;
-
-	UnflattenerUtil(FlattenerRegistry flattenerRegistry) {
-		if (flattenerRegistry == null) {
-			throw new IllegalArgumentException("FlattenerRegistry is null!");
-		}
-		this.flattenerRegistry = flattenerRegistry;
-	}
-
-	private FlattenerRegistry getFlattenerRegistry() {
-		return flattenerRegistry;
 	}
 
 	/**
@@ -105,16 +89,5 @@ class UnflattenerUtil {
 	final void populateCollection(Object object, Object value)
 	        throws IllegalAccessException, InvocationTargetException {
 		Collections.addAll((Collection) object, value);
-	}
-
-	final Object readPrimitiveValue(String typedValueStr) {
-		final int start = typedValueStr.indexOf(TYPE_SEPARATE);
-		final String typeAbbr = typedValueStr.substring(0, start);
-		final String valueStr = typedValueStr.substring(start + 1);
-		final Class<?> clazz = TypeNameAbbretionMap.getInstance()
-		        .toClass(typeAbbr);
-		final ValueConverter<?> valueConverter = getFlattenerRegistry()
-		        .getValueTypeRegistry().getConverter(clazz);
-		return valueConverter.valueOf(valueStr);
 	}
 }

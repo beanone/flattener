@@ -1,5 +1,7 @@
 package org.beanone.flattener;
 
+import static org.beanone.flattener.FlattenerContants.TYPE_SEPARATE;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Time;
@@ -15,6 +17,7 @@ import org.beanone.flattener.api.Flattener;
 import org.beanone.flattener.api.FlattenerRegistry;
 import org.beanone.flattener.api.FlattenerResolver;
 import org.beanone.flattener.api.PrimitiveValueRegistry;
+import org.beanone.flattener.api.TypeNameAbbretionMap;
 import org.beanone.flattener.api.Unflattener;
 import org.beanone.flattener.api.UnflattenerResolver;
 import org.beanone.flattener.api.ValueConverter;
@@ -58,7 +61,7 @@ class FlattenerRegistryImpl implements FlattenerRegistry {
 		valueTypeRegistry.register(Boolean.class, Boolean::valueOf);
 		valueTypeRegistry.register(Character.class, v -> v.charAt(0));
 		valueTypeRegistry.register(String.class, v -> v);
-		valueTypeRegistry.register(Class.class, UnflattenerUtil::classValueOf);
+		valueTypeRegistry.register(Class.class, FlattenerUtil::classValueOf);
 		valueTypeRegistry.register(Date.class, new UtilDateConverter());
 		valueTypeRegistry.register(java.sql.Date.class, new SqlDateConverter());
 		valueTypeRegistry.register(Time.class, new SqlTimeConverter());
@@ -106,6 +109,18 @@ class FlattenerRegistryImpl implements FlattenerRegistry {
 	@Override
 	public PrimitiveValueRegistry getValueTypeRegistry() {
 		return valueTypeRegistry;
+	}
+
+	@Override
+	public Object parsePrimitive(String typedValueStr) {
+		final int start = typedValueStr.indexOf(TYPE_SEPARATE);
+		final String typeAbbr = typedValueStr.substring(0, start);
+		final String valueStr = typedValueStr.substring(start + 1);
+		final Class<?> clazz = TypeNameAbbretionMap.getInstance()
+		        .toClass(typeAbbr);
+		final ValueConverter<?> valueConverter = getValueTypeRegistry()
+		        .getConverter(clazz);
+		return valueConverter.valueOf(valueStr);
 	}
 
 	@Override

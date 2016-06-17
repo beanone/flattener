@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.beanone</groupId>
 	<artifactId>flattener</artifactId>
-	<version>1.3.2</version>
+	<version>1.3.3-SNAPSHOT</version>
 
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>A utility library that allows one to turn a JavaBean into a flat Map of attributes</description>

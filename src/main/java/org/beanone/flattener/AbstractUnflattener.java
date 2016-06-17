@@ -19,7 +19,13 @@ import org.beanone.flattener.exception.FlattenerException;
  *
  */
 public abstract class AbstractUnflattener implements Unflattener {
-	private final Map<String, Object> beanRefs = new HashMap<>();
+	private static final ThreadLocal<Map<String, Object>> VALUE_REFS = new ThreadLocal<Map<String, Object>>() {
+		@Override
+		protected Map<String, Object> initialValue() {
+			return new HashMap<>();
+		}
+	};
+
 	private final FlattenerRegistry flattenerRegistry;
 	private final FlattenerUtil util;
 
@@ -41,7 +47,7 @@ public abstract class AbstractUnflattener implements Unflattener {
 		try {
 			return Unflattener.super.unflat(flattened);
 		} finally {
-			this.beanRefs.clear();
+			VALUE_REFS.get().clear();
 		}
 	}
 
@@ -53,7 +59,7 @@ public abstract class AbstractUnflattener implements Unflattener {
 			final String prefix = classKey.substring(0,
 			        classKey.length() - CTYPE_SUFFIX.length());
 			final Object object = doCreateObject(flatted, keyStack, clazz);
-			this.beanRefs.put(prefix, object);
+			VALUE_REFS.get().put(prefix, object);
 			while (!keyStack.isEmpty()) {
 				final String key = keyStack.peek();
 				if (!key.startsWith(prefix)) {
@@ -68,7 +74,7 @@ public abstract class AbstractUnflattener implements Unflattener {
 				} else if (key.endsWith(REF_SUFFIX)) {
 					keyStack.pop();
 					final String refObjectKey = flatted.get(key);
-					final Object value = this.beanRefs.get(refObjectKey);
+					final Object value = VALUE_REFS.get().get(refObjectKey);
 					doPopulate(object, key, REF_SUFFIX.length(), value);
 				} else {
 					keyStack.pop();

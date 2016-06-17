@@ -20,7 +20,13 @@ import org.beanone.flattener.api.ValueConverter;
  *
  */
 public abstract class AbstractFlattener implements Flattener {
-	private final Map<Object, String> valueRefs = new HashMap<>();
+	private static final ThreadLocal<Map<Object, String>> VALUE_REFS = new ThreadLocal<Map<Object, String>>() {
+		@Override
+		protected Map<Object, String> initialValue() {
+			return new HashMap<>();
+		}
+	};
+
 	private final FlattenerRegistry flattenerRegistry;
 
 	protected AbstractFlattener(FlattenerRegistry flattenerRegistry) {
@@ -35,7 +41,7 @@ public abstract class AbstractFlattener implements Flattener {
 		try {
 			return Flattener.super.flat(object);
 		} finally {
-			this.valueRefs.clear();
+			VALUE_REFS.get().clear();
 		}
 	}
 
@@ -46,7 +52,7 @@ public abstract class AbstractFlattener implements Flattener {
 		if (object != null) {
 			// save the reference so that we don't flatten the same
 			// again in the graph
-			this.valueRefs.put(object, removeLastDot(prefix));
+			VALUE_REFS.get().put(object, removeLastDot(prefix));
 			returns.put(createFullKey(prefix, CTYPE_SUFFIX),
 			        object.getClass().getName());
 			doFlat(object, (key, value, renderValueType) -> {
@@ -68,10 +74,11 @@ public abstract class AbstractFlattener implements Flattener {
 			                renderValueType ? converter.toTypedString(value)
 			                        : converter.toString(value),
 			                value, object, callback);
-				} else if (this.valueRefs.containsKey(value)) {
+				} else if (VALUE_REFS.get().containsKey(value)) {
 					// already processed values - to avoid cyclic issues
 					addKeyValue(returns, fullKey + REF_SUFFIX,
-			                this.valueRefs.get(value), value, object, callback);
+			                VALUE_REFS.get().get(value), value, object,
+			                callback);
 				} else {
 					// flatten the value
 					final Flattener mapper = getFlattenerRegistry()

@@ -5,6 +5,7 @@ import static org.beanone.flattener.FlattenerContants.CTYPE_SUFFIX;
 import static org.beanone.flattener.FlattenerContants.REF_SUFFIX;
 import static org.beanone.flattener.FlattenerContants.SUFFIX_SEPARATE;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,7 +53,7 @@ public abstract class AbstractFlattener implements Flattener {
 		if (object != null) {
 			// save the reference so that we don't flatten the same
 			// again in the graph
-			VALUE_REFS.get().put(object, removeLastDot(prefix));
+			cacheObject(object, prefix);
 			returns.put(createFullKey(prefix, CTYPE_SUFFIX),
 			        object.getClass().getName());
 			doFlat(object, (key, value, renderValueType) -> {
@@ -101,6 +102,21 @@ public abstract class AbstractFlattener implements Flattener {
 	        FlattenerCallback callback) {
 		attributeMap.put(key, strVal);
 		callback.callback(key, strVal, value, object);
+	}
+
+	private void cacheObject(Object object, String prefix) {
+		if (object instanceof Collection<?>) {
+			if (((Collection<?>) object).isEmpty()) {
+				return;
+			}
+		}
+
+		if (object instanceof Map<?, ?>) {
+			if (((Map<?, ?>) object).isEmpty()) {
+				return;
+			}
+		}
+		VALUE_REFS.get().put(object, removeLastDot(prefix));
 	}
 
 	private String createFullKey(String prefix, String key) {

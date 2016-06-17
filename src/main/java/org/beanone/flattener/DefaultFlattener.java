@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.beanone.flattener.api.FlattenerRegistry;
@@ -16,6 +17,8 @@ import org.beanone.flattener.exception.FlattenerException;
  *
  */
 class DefaultFlattener extends AbstractFlattener {
+	private final FieldNameNatureComparator nameComparator = new FieldNameNatureComparator();
+
 	protected DefaultFlattener(FlattenerRegistry flattenerRegistry) {
 		super(flattenerRegistry);
 	}
@@ -27,6 +30,7 @@ class DefaultFlattener extends AbstractFlattener {
 			returns.addAll(getAllFields(clazz.getSuperclass()));
 		}
 
+		Collections.sort(returns, this.nameComparator);
 		return returns;
 	}
 

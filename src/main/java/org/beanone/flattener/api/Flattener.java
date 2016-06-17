@@ -31,7 +31,9 @@ public interface Flattener {
 	 * @param prefix
 	 *            the String to prefix every key
 	 * @param callback
-	 *            TODO
+	 *            a callback function invoked when an attribute is flattened.
+	 *            This gives the caller an opportunity to things like mapping
+	 *            attributes to that of some other objects.
 	 * @return a {@link Map} of String to String.
 	 */
 	Map<String, String> flat(Object object, String prefix,

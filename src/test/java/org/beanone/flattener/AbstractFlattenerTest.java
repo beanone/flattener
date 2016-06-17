@@ -42,6 +42,16 @@ public class AbstractFlattenerTest {
 		}
 	}
 
+	@Test(expected = IllegalArgumentException.class)
+	public void testAbstractFlattenerFlattenerRegistryNull() {
+		new AbstractFlattener(null) {
+			@Override
+			protected void doFlat(Object object, KeyValueHandler handler) {
+				// do nothing
+			}
+		};
+	}
+
 	@Test
 	public void testFlatObjectPrefixOfNullObject() {
 		final MockFlattener flattener = new MockFlattener(

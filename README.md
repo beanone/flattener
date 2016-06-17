@@ -26,7 +26,7 @@ Another very important benefit that many might not realize is that, the act of f
 
 	Object aBean = new FlattenerTool().unflat(flatted);
 
-By default, Flattener can handle primitive Java types and their wrapper classes, String, java.util.Date, java.sql.Date, java.sql.Time, java.sql.Timestamp, BigInterger, BigDecimal and simple enum values. All of which are treated as primitives (that is, attributes of the objects are not serialized since there is not need for that). 
+By default, Flattener can handle primitive Java types and their wrapper classes, String, java.util.Date, java.sql.Date, java.sql.Time, java.sql.Timestamp, BigInterger, BigDecimal and simple enum values. All of which are treated as primitives (that is, attributes of the objects are not serialized since there is no need for that). 
 
 All java.util.Collection objects are handled by a CollectionFlattener and CollectionUnflattener. java.util.Map objects are handled by MapFlattener and MapUnflattener. All array objects are handled by ArrayFlattener and ArrayUnflattener. All other objects are handled by DefaultFlattener and DefaultUnflattener by default.
 

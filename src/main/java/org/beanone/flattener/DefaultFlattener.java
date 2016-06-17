@@ -1,6 +1,10 @@
 package org.beanone.flattener;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.beanone.flattener.api.FlattenerRegistry;
 import org.beanone.flattener.exception.FlattenerException;
@@ -16,12 +20,31 @@ class DefaultFlattener extends AbstractFlattener {
 		super(flattenerRegistry);
 	}
 
+	private List<Field> getAllFields(Class<?> clazz) {
+		final List<Field> returns = new ArrayList<>();
+		if (clazz != null) {
+			returns.addAll(Arrays.asList(clazz.getDeclaredFields()));
+			returns.addAll(getAllFields(clazz.getSuperclass()));
+		}
+
+		return returns;
+	}
+
+	private boolean hasModifier(int modifiers, int modifier) {
+		return (modifiers & modifier) == modifier;
+	}
+
+	private boolean isStaticFinal(Field f) {
+		return hasModifier(f.getModifiers(), Modifier.FINAL)
+		        && hasModifier(f.getModifiers(), Modifier.STATIC);
+	}
+
 	@Override
 	protected void doFlat(Object object, KeyValueHandler handler) {
 		try {
-			final Field[] fields = object.getClass().getDeclaredFields();
+			final List<Field> fields = getAllFields(object.getClass());
 			for (final Field f : fields) {
-				if (!f.isSynthetic()) {
+				if (!f.isSynthetic() && !isStaticFinal(f)) {
 					f.setAccessible(true);
 					handler.handle(f.getName(), f.get(object), true);
 				}

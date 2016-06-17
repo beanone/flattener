@@ -1,5 +1,6 @@
 package org.beanone.flattener;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -72,6 +73,19 @@ public class FlattenerToolTest {
 	}
 
 	@Test
+	public void testFlatSubClass() throws Exception {
+		final SubClassTestBean bean = new SubClassTestBean();
+		bean.setStrBase("string base");
+		bean.setStrSub("string sub");
+		bean.setListBase(Arrays.asList("a", "b"));
+		bean.setListSub(Arrays.asList("A", "B"));
+		bean.setMapBase(createMap());
+		Assert.assertEquals(
+		        "{#1ctype=org.beanone.flattener.SubClassTestBean, listBase#1ctype=java.util.Arrays$ArrayList, listBase#2size=2, listBase.0=S,a, listBase.1=S,b, listSub#1ctype=java.util.Arrays$ArrayList, listSub#2size=2, listSub.0=S,A, listSub.1=S,B, mapBase#1ctype=java.util.HashMap, mapBase#2size=2, mapBase.1#key=S,k1, mapBase.1#value=S,v1, mapBase.2#key=S,k2, mapBase.2#value=S,v2, strBase=S,string base, strSub=S,string sub}",
+		        new FlattenerTool().flat(bean).toString().trim());
+	}
+
+	@Test
 	public void testPrint() {
 		final FlattenerTool tool = new FlattenerTool();
 		tool.print(new Object());
@@ -136,5 +150,12 @@ public class FlattenerToolTest {
 		final Object result = tool.unflat(map);
 		Assert.assertNotNull(result);
 		Assert.assertEquals("Hello", result);
+	}
+
+	private Map<String, String> createMap() {
+		final Map<String, String> returns = new HashMap<>();
+		returns.put("k1", "v1");
+		returns.put("k2", "v2");
+		return returns;
 	}
 }

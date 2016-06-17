@@ -7,14 +7,14 @@ This can be viewed as a new java serialization / deserialization mechanism. Howe
 Since a flat map is much more efficient and easier to work with, this opens up great potentials for the creation of other generic APIs and applications. Below are some that can be created as follow up to this API.
 
 * Generic Serialization / deserialization for any bean (does not have to be declared as Serializable))
-* Generic bean mapping externalized and with ability to support complex mapping rules + calculations (see ![xmapper](https://github.com/beanone/xmapper))
-* Generic object diffs and updates using delta (see ![beanone](https://github.com/beanone/beanone))
-* Generic persistence allow easy navigation from snapshot to snapshot (see ![beanone](https://github.com/beanone/beanone))
+* Generic bean mapping externalized and with ability to support complex mapping rules + calculations (see <a href="https://github.com/beanone/xmapper">xmapper</a>)
+* Generic object diffs and updates using delta (see <a href="https://github.com/beanone/beanone">beanone</a>)
+* Generic persistence allow easy navigation from snapshot to snapshot (see <a href="https://github.com/beanone/beanone">beanone</a>)
 * Generic support of undo/redo of objects
 * Generic object equals (as a special case for the below)
 * Generic rules built for objects-configuration driven (e.g., rules to determine similar beans)
 
-Another very important benefit that many might not realize is that, the act of flattening the object, essentially separates the object structure out so that you have an opportunity to work with object structure meta data directly. It is this advantage that makes it possible to easily implement a sophisticated generic and extensible object mapper (see ![xmapper](https://github.com/beanone/xmapper)).
+Another very important benefit that many might not realize is that, the act of flattening the object, essentially separates the object structure out so that you have an opportunity to work with object structure meta data directly. It is this advantage that makes it possible to easily implement a sophisticated generic and extensible object mapper (see <a href="https://github.com/beanone/xmapper">xmapper</a>).
 
 ## Usage
 

@@ -1,6 +1,6 @@
 # Flattener
 
-A simple library that allows one to easily turn a Java bean of arbitrary complexity (with circlic references included) into a flat string to string map and vise versa. 
+A simple library that allows one to easily turn a Java bean of arbitrary complexity (with cyclic references included) into a flat string to string map and vise versa. 
 
 This can be viewed as a new java serialization / deserialization mechanism. However, unlike most of the other well accepted serialization methods, such as XML or Json serialization, Flattener keeps the attribute data type in the serialized form and thus it is much simpler to deserialize.
 

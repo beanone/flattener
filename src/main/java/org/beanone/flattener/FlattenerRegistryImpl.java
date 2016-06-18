@@ -11,6 +11,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.commons.lang3.ClassUtils;
 import org.beanone.flattener.api.Flattener;
@@ -52,22 +55,33 @@ class FlattenerRegistryImpl implements FlattenerRegistry {
 		registerUnflattener(clazz -> ClassUtils.isAssignable(clazz, Map.class),
 		        new MapUnflattener(this));
 
-		valueTypeRegistry.register(Integer.class, Integer::valueOf);
-		valueTypeRegistry.register(Long.class, Long::valueOf);
-		valueTypeRegistry.register(Double.class, Double::valueOf);
-		valueTypeRegistry.register(Float.class, Float::valueOf);
-		valueTypeRegistry.register(Short.class, Short::valueOf);
-		valueTypeRegistry.register(Byte.class, Byte::valueOf);
-		valueTypeRegistry.register(Boolean.class, Boolean::valueOf);
-		valueTypeRegistry.register(Character.class, v -> v.charAt(0));
-		valueTypeRegistry.register(String.class, v -> v);
-		valueTypeRegistry.register(Class.class, FlattenerUtil::classValueOf);
-		valueTypeRegistry.register(Date.class, new UtilDateConverter());
-		valueTypeRegistry.register(java.sql.Date.class, new SqlDateConverter());
-		valueTypeRegistry.register(Time.class, new SqlTimeConverter());
-		valueTypeRegistry.register(Timestamp.class, new TimestampConverter());
-		valueTypeRegistry.register(BigInteger.class, v -> new BigInteger(v));
-		valueTypeRegistry.register(BigDecimal.class, v -> new BigDecimal(v));
+		this.valueTypeRegistry.register(Integer.class, Integer::valueOf);
+		this.valueTypeRegistry.register(AtomicInteger.class,
+		        v -> new AtomicInteger(Integer.valueOf(v)));
+		this.valueTypeRegistry.register(Long.class, Long::valueOf);
+		this.valueTypeRegistry.register(AtomicLong.class,
+		        v -> new AtomicLong(Long.valueOf(v)));
+		this.valueTypeRegistry.register(Double.class, Double::valueOf);
+		this.valueTypeRegistry.register(Float.class, Float::valueOf);
+		this.valueTypeRegistry.register(Short.class, Short::valueOf);
+		this.valueTypeRegistry.register(Byte.class, Byte::valueOf);
+		this.valueTypeRegistry.register(Boolean.class, Boolean::valueOf);
+		this.valueTypeRegistry.register(AtomicBoolean.class,
+		        v -> new AtomicBoolean(Boolean.valueOf(v)));
+		this.valueTypeRegistry.register(Character.class, v -> v.charAt(0));
+		this.valueTypeRegistry.register(String.class, v -> v);
+		this.valueTypeRegistry.register(Class.class,
+		        FlattenerUtil::classValueOf);
+		this.valueTypeRegistry.register(Date.class, new UtilDateConverter());
+		this.valueTypeRegistry.register(java.sql.Date.class,
+		        new SqlDateConverter());
+		this.valueTypeRegistry.register(Time.class, new SqlTimeConverter());
+		this.valueTypeRegistry.register(Timestamp.class,
+		        new TimestampConverter());
+		this.valueTypeRegistry.register(BigInteger.class,
+		        v -> new BigInteger(v));
+		this.valueTypeRegistry.register(BigDecimal.class,
+		        v -> new BigDecimal(v));
 	}
 
 	@SuppressWarnings({ "rawtypes" })
@@ -78,7 +92,7 @@ class FlattenerRegistryImpl implements FlattenerRegistry {
 
 	@Override
 	public Flattener findFlattener(Object value) {
-		for (final Entry<FlattenerResolver, Flattener> entry : flatteners
+		for (final Entry<FlattenerResolver, Flattener> entry : this.flatteners
 		        .entrySet()) {
 			if (entry.getKey().accept(value)) {
 				return entry.getValue();
@@ -86,14 +100,14 @@ class FlattenerRegistryImpl implements FlattenerRegistry {
 		}
 
 		if (value instanceof Enum) {
-			return defaultEnumFlattener;
+			return this.defaultEnumFlattener;
 		}
-		return defaultFlattener;
+		return this.defaultFlattener;
 	}
 
 	@Override
 	public Unflattener findUnflattener(Class<?> clazz) {
-		for (final Entry<UnflattenerResolver, Unflattener> entry : unflatteners
+		for (final Entry<UnflattenerResolver, Unflattener> entry : this.unflatteners
 		        .entrySet()) {
 			if (clazz != null && entry.getKey().accept(clazz)) {
 				return entry.getValue();
@@ -101,14 +115,14 @@ class FlattenerRegistryImpl implements FlattenerRegistry {
 		}
 
 		if (clazz != null && clazz.isEnum()) {
-			return defaultEnumUnflattener;
+			return this.defaultEnumUnflattener;
 		}
-		return defaultUnflattener;
+		return this.defaultUnflattener;
 	}
 
 	@Override
 	public PrimitiveValueRegistry getValueTypeRegistry() {
-		return valueTypeRegistry;
+		return this.valueTypeRegistry;
 	}
 
 	@Override
@@ -129,7 +143,7 @@ class FlattenerRegistryImpl implements FlattenerRegistry {
 		if (resolver == null || mapper == null) {
 			throw new IllegalArgumentException();
 		}
-		flatteners.put(resolver, mapper);
+		this.flatteners.put(resolver, mapper);
 	}
 
 	@Override
@@ -138,6 +152,6 @@ class FlattenerRegistryImpl implements FlattenerRegistry {
 		if (resolver == null || mapper == null) {
 			throw new IllegalArgumentException();
 		}
-		unflatteners.put(resolver, mapper);
+		this.unflatteners.put(resolver, mapper);
 	}
 }

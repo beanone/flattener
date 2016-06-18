@@ -36,20 +36,23 @@ public class DefaultFlattenerTest {
 		final Map<String, String> result = this.flattener
 		        .flat(new SimpleTestBean());
 		Assert.assertNotNull(result);
-		Assert.assertEquals(31, result.size());
+		Assert.assertEquals(34, result.size());
 		Assert.assertEquals("org.beanone.flattener.SimpleTestBean",
 		        result.get("#1ctype"));
 		Assert.assertEquals("I,1", result.get("intVal"));
+		Assert.assertEquals("AI,1", result.get("aIntVal"));
 		Assert.assertEquals("I,1", result.get("intValue"));
 		Assert.assertEquals("D,1.0", result.get("doubleVal"));
 		Assert.assertEquals("D,1.0", result.get("doubleValue"));
 		Assert.assertEquals("F,1.0", result.get("floatVal"));
 		Assert.assertEquals("F,1.0", result.get("floatValue"));
 		Assert.assertEquals("L,1", result.get("longVal"));
+		Assert.assertEquals("AL,1", result.get("aLongVal"));
 		Assert.assertEquals("L,1", result.get("longValue"));
 		Assert.assertEquals("H,1", result.get("shortVal"));
 		Assert.assertEquals("H,1", result.get("shortValue"));
 		Assert.assertEquals("B,true", result.get("booleanVal"));
+		Assert.assertEquals("AB,true", result.get("aBooleanVal"));
 		Assert.assertEquals("B,true", result.get("booleanValue"));
 		Assert.assertEquals("C,a", result.get("charVal"));
 		Assert.assertEquals("C,A", result.get("charValue"));

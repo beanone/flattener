@@ -7,6 +7,9 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * A registry for abbreviations of all primitive value types. The abbreviation
@@ -29,12 +32,15 @@ public class TypeNameAbbretionMap {
 
 	private TypeNameAbbretionMap() {
 		add("I", Integer.class);
+		add("AI", AtomicInteger.class);
 		add("L", Long.class);
+		add("AL", AtomicLong.class);
 		add("D", Double.class);
 		add("F", Float.class);
 		add("H", Short.class);
 		add("Y", Byte.class);
 		add("B", Boolean.class);
+		add("AB", AtomicBoolean.class);
 		add("C", Character.class);
 		add("S", String.class);
 		add("T", Class.class);
@@ -56,12 +62,13 @@ public class TypeNameAbbretionMap {
 	 * @param clazz
 	 */
 	public void add(String abbr, Class<?> clazz) {
-		if (toClassMap.containsKey(abbr) || fromClassMap.containsKey(clazz)) {
+		if (this.toClassMap.containsKey(abbr)
+		        || this.fromClassMap.containsKey(clazz)) {
 			throw new IllegalArgumentException("Already mapped abbreviation "
 			        + abbr + " and class " + clazz);
 		}
-		toClassMap.put(abbr, clazz);
-		fromClassMap.put(clazz, abbr);
+		this.toClassMap.put(abbr, clazz);
+		this.fromClassMap.put(clazz, abbr);
 	}
 
 	/**
@@ -72,7 +79,7 @@ public class TypeNameAbbretionMap {
 	 * @return the abbreviation or null if not found.
 	 */
 	public String fromClass(Class<?> clazz) {
-		return fromClassMap.get(clazz);
+		return this.fromClassMap.get(clazz);
 	}
 
 	/**
@@ -83,6 +90,6 @@ public class TypeNameAbbretionMap {
 	 * @return a Class.
 	 */
 	public Class<?> toClass(String abbr) {
-		return toClassMap.get(abbr);
+		return this.toClassMap.get(abbr);
 	}
 }

@@ -10,15 +10,21 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class SimpleTestBean {
 	private int intVal = 1;
+	private AtomicInteger aIntVal = new AtomicInteger(1);
 	private long longVal = 1L;
+	private AtomicLong aLongVal = new AtomicLong(1L);
 	private double doubleVal = 1.0;
 	private float floatVal = 1.0F;
 	private short shortVal = 1;
 	private byte byteVal = 1;
 	private boolean booleanVal = true;
+	private AtomicBoolean aBooleanVal = new AtomicBoolean(true);
 	private char charVal = 'a';
 	private Integer intValue = 1;
 	private Long longValue = 1L;
@@ -42,6 +48,18 @@ public class SimpleTestBean {
 	private BigDecimal bdVal = BigDecimal.valueOf(Double.MAX_VALUE).pow(2);
 	private List<String> emptyList = new ArrayList<>();
 	private Map<String, String> emptyMap = new HashMap<String, String>();
+
+	public AtomicBoolean getaBooleanVal() {
+		return this.aBooleanVal;
+	}
+
+	public AtomicInteger getaIntVal() {
+		return this.aIntVal;
+	}
+
+	public AtomicLong getaLongVal() {
+		return this.aLongVal;
+	}
 
 	public int[] getArrayOfInts() {
 		return this.arrayOfInts;
@@ -153,6 +171,18 @@ public class SimpleTestBean {
 
 	public boolean isBooleanVal() {
 		return this.booleanVal;
+	}
+
+	public void setaBooleanVal(AtomicBoolean aBooleanVal) {
+		this.aBooleanVal = aBooleanVal;
+	}
+
+	public void setaIntVal(AtomicInteger aIntVal) {
+		this.aIntVal = aIntVal;
+	}
+
+	public void setaLongVal(AtomicLong aLongVal) {
+		this.aLongVal = aLongVal;
 	}
 
 	public void setArrayOfInts(int[] arrayOfInts) {

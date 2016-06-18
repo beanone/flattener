@@ -6,7 +6,15 @@ import java.util.List;
 import java.util.Map;
 
 public class ComplexTestBean {
+	private static final String A_CONSTANT = "some constant";
 	private Integer intVal = 10;
+	// Make sure that empty list and maps are properly serialized NOT as
+	// references (the VM might optimize it and thus we have to treat it
+	// specially so that they are not serialized as references). For it to be
+	// tested, we need to have at least two attributes that are empty list or
+	// map. One is here and another is in the SimpleTestBean
+	private List<String> emptyList = new ArrayList<>();
+	private Map<String, String> emptyMap = new HashMap<String, String>();
 	private List<SimpleTestBean> listOfBeans = createListOfBeans();
 	private List<Map<List<SimpleTestBean>, SimpleTestBean>> listOfMapOfBeans = createListOfMapOfBeans();
 	private SimpleTestBean[] arrayOfBeans = { new SimpleTestBean(),
@@ -14,27 +22,53 @@ public class ComplexTestBean {
 	private Map<String, String> map = createSimpleMap();
 
 	public SimpleTestBean[] getArrayOfBeans() {
-		return arrayOfBeans;
+		return this.arrayOfBeans;
+	}
+
+	public String getConstant() {
+		return A_CONSTANT;
+	}
+
+	public List<String> getEmptyList() {
+		return this.emptyList;
+	}
+
+	public Map<String, String> getEmptyMap() {
+		return this.emptyMap;
 	}
 
 	public Integer getIntVal() {
-		return intVal;
+		return this.intVal;
 	}
 
 	public List<SimpleTestBean> getListOfBeans() {
-		return listOfBeans;
+		return this.listOfBeans;
 	}
 
 	public List<Map<List<SimpleTestBean>, SimpleTestBean>> getListOfMapOfBeans() {
-		return listOfMapOfBeans;
+		return this.listOfMapOfBeans;
 	}
 
 	public Map<String, String> getMap() {
-		return map;
+		return this.map;
 	}
 
 	public void setArrayOfBeans(SimpleTestBean[] arrayOfBeans) {
 		this.arrayOfBeans = arrayOfBeans;
+	}
+
+	// to fake it to trick Java reflection and make sure that our test still
+	// pass
+	public void setConstant(String val) {
+		// do nothing;
+	}
+
+	public void setEmptyList(List<String> emptyList) {
+		this.emptyList = emptyList;
+	}
+
+	public void setEmptyMap(Map<String, String> emptyMap) {
+		this.emptyMap = emptyMap;
 	}
 
 	public void setIntVal(Integer intVal) {

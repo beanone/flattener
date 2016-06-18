@@ -15,7 +15,7 @@ import org.beanone.flattener.api.ValueConverter;
 
 public class FlattenerTool {
 	private final FlattenerRegistry flattenerRegistry = new FlattenerRegistryImpl();
-	private Comparator<String> sortBy;
+	private Comparator<String> sortBy = new NaturalComparator();
 
 	public Map<String, String> flat(Object object) {
 		final Flattener flattener = getFlattenerRegistry()

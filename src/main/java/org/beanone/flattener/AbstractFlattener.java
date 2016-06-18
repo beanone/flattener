@@ -105,16 +105,13 @@ public abstract class AbstractFlattener implements Flattener {
 	}
 
 	private void cacheObject(Object object, String prefix) {
-		if (object instanceof Collection<?>) {
-			if (((Collection<?>) object).isEmpty()) {
-				return;
-			}
+		if (object instanceof Collection<?>
+		        && ((Collection<?>) object).isEmpty()) {
+			return;
 		}
 
-		if (object instanceof Map<?, ?>) {
-			if (((Map<?, ?>) object).isEmpty()) {
-				return;
-			}
+		if (object instanceof Map<?, ?> && ((Map<?, ?>) object).isEmpty()) {
+			return;
 		}
 		VALUE_REFS.get().put(object, removeLastDot(prefix));
 	}

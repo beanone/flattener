@@ -28,14 +28,15 @@ public class DefaultFlattenerTest {
 		final KeyValueHandler handler = Mockito.mock(KeyValueHandler.class);
 		Mockito.doThrow(IllegalAccessException.class).when(handler).handle(
 		        Mockito.anyString(), Mockito.any(), Mockito.anyBoolean());
-		flattener.doFlat(new MockBean(), handler);
+		this.flattener.doFlat(new MockBean(), handler);
 	}
 
 	@Test
 	public void testFlat() {
-		final Map<String, String> result = flattener.flat(new SimpleTestBean());
+		final Map<String, String> result = this.flattener
+		        .flat(new SimpleTestBean());
 		Assert.assertNotNull(result);
-		Assert.assertEquals(27, result.size());
+		Assert.assertEquals(31, result.size());
 		Assert.assertEquals("org.beanone.flattener.SimpleTestBean",
 		        result.get("#1ctype"));
 		Assert.assertEquals("I,1", result.get("intVal"));
@@ -70,7 +71,7 @@ public class DefaultFlattenerTest {
 
 	public void testFlatArray() {
 		final int[] arr = { 10, 20, 30, 40 };
-		final Map<String, String> map = flattener.flat(arr);
+		final Map<String, String> map = this.flattener.flat(arr);
 		Assert.assertNotNull(map);
 		Assert.assertEquals(5, map.size());
 	}

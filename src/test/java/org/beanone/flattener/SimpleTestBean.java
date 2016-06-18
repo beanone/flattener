@@ -4,8 +4,12 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SimpleTestBean {
 	private int intVal = 1;
@@ -36,109 +40,119 @@ public class SimpleTestBean {
 	private BigInteger biVal = BigInteger.valueOf(Long.MAX_VALUE)
 	        .nextProbablePrime();
 	private BigDecimal bdVal = BigDecimal.valueOf(Double.MAX_VALUE).pow(2);
+	private List<String> emptyList = new ArrayList<>();
+	private Map<String, String> emptyMap = new HashMap<String, String>();
 
 	public int[] getArrayOfInts() {
-		return arrayOfInts;
+		return this.arrayOfInts;
 	}
 
 	public BigDecimal getBdVal() {
-		return bdVal;
+		return this.bdVal;
 	}
 
 	public BigInteger getBiVal() {
-		return biVal;
+		return this.biVal;
 	}
 
 	public Boolean getBooleanValue() {
-		return booleanValue;
+		return this.booleanValue;
 	}
 
 	public byte getByteVal() {
-		return byteVal;
+		return this.byteVal;
 	}
 
 	public Byte getByteValue() {
-		return byteValue;
+		return this.byteValue;
 	}
 
 	public char getCharVal() {
-		return charVal;
+		return this.charVal;
 	}
 
 	public Character getCharValue() {
-		return charValue;
+		return this.charValue;
 	}
 
 	public ColorEnum getColor() {
-		return color;
+		return this.color;
 	}
 
 	public double getDoubleVal() {
-		return doubleVal;
+		return this.doubleVal;
 	}
 
 	public Double getDoubleValue() {
-		return doubleValue;
+		return this.doubleValue;
+	}
+
+	public List<String> getEmptyList() {
+		return this.emptyList;
+	}
+
+	public Map<String, String> getEmptyMap() {
+		return this.emptyMap;
 	}
 
 	public float getFloatVal() {
-		return floatVal;
+		return this.floatVal;
 	}
 
 	public Float getFloatValue() {
-		return floatValue;
+		return this.floatValue;
 	}
 
 	public int getIntVal() {
-		return intVal;
+		return this.intVal;
 	}
 
 	public Integer getIntValue() {
-		return intValue;
+		return this.intValue;
 	}
 
 	public long getLongVal() {
-		return longVal;
+		return this.longVal;
 	}
 
 	public Long getLongValue() {
-		return longValue;
+		return this.longValue;
 	}
 
 	public SimpleTestBean getSelfRef() {
-		return selfRef;
+		return this.selfRef;
 	}
 
 	public short getShortVal() {
-		return shortVal;
+		return this.shortVal;
 	}
 
 	public Short getShortValue() {
-		return shortValue;
+		return this.shortValue;
 	}
 
 	public java.sql.Date getSqlDateVal() {
-		return sqlDateVal;
+		return this.sqlDateVal;
 	}
 
 	public String getStrVal() {
-		return strVal;
+		return this.strVal;
 	}
 
 	public Time getTimeVal() {
-		return timeVal;
+		return this.timeVal;
 	}
 
 	public Timestamp getTsVal() {
-		return tsVal;
+		return this.tsVal;
 	}
 
 	public Date getUtilDateVal() {
-		return utilDateVal;
+		return this.utilDateVal;
 	}
 
 	public boolean isBooleanVal() {
-		return booleanVal;
+		return this.booleanVal;
 	}
 
 	public void setArrayOfInts(int[] arrayOfInts) {
@@ -150,7 +164,7 @@ public class SimpleTestBean {
 	}
 
 	public void setBiVal(BigInteger bi) {
-		biVal = bi;
+		this.biVal = bi;
 	}
 
 	public void setBooleanVal(boolean booleanVal) {
@@ -187,6 +201,14 @@ public class SimpleTestBean {
 
 	public void setDoubleValue(Double doubleValue) {
 		this.doubleValue = doubleValue;
+	}
+
+	public void setEmptyList(List<String> emptyList) {
+		this.emptyList = emptyList;
+	}
+
+	public void setEmptyMap(Map<String, String> emptyMap) {
+		this.emptyMap = emptyMap;
 	}
 
 	public void setFloatVal(float floatVal) {
@@ -226,7 +248,7 @@ public class SimpleTestBean {
 	}
 
 	public void setSqlDateVal(java.sql.Date sqlDateValue) {
-		sqlDateVal = sqlDateValue;
+		this.sqlDateVal = sqlDateValue;
 	}
 
 	public void setStrVal(String strVal) {
@@ -242,6 +264,6 @@ public class SimpleTestBean {
 	}
 
 	public void setUtilDateVal(Date date) {
-		utilDateVal = date;
+		this.utilDateVal = date;
 	}
 }

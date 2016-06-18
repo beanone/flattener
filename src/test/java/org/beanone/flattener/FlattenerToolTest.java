@@ -35,9 +35,35 @@ public class FlattenerToolTest {
 	}
 
 	@Test
+	public void testFlatAndUnfatOfIntArray() {
+		// use more than 10 number to test that the resulting map is ordered by
+		// key using natural ordering.
+		final int[] intArr = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+		final FlattenerTool tool = new FlattenerTool();
+		final Map<String, String> result = tool.flat(intArr);
+		Assert.assertNotNull(result);
+		Assert.assertEquals(15, result.size());
+		Assert.assertEquals("[I", result.get("#1ctype"));
+		Assert.assertEquals("I,0", result.get("0"));
+		Assert.assertEquals("I,1", result.get("1"));
+		Assert.assertEquals("I,11", result.get("11"));
+		Assert.assertEquals("12", result.get("#2size"));
+		Assert.assertEquals("int", result.get("#3etype"));
+		final String[] strArray = result.keySet().toArray(new String[0]);
+		Assert.assertEquals(strArray[strArray.length - 1], "11");
+		final int[] resultArr = (int[]) tool.unflat(result);
+		Assert.assertEquals(intArr.length, resultArr.length);
+		for (int i = 0; i < intArr.length; i++) {
+			Assert.assertEquals(intArr[i], resultArr[i]);
+		}
+	}
+
+	@Test
 	public void testFlatAndUnflatOfComplexTestBean() {
 		final ComplexTestBean bean = new ComplexTestBean();
-		final int[] numbers = { 10, 20, 30 };
+		// with greater than 10 element, we test the natural ordering and proper
+		// unflat of object with such ordering.
+		final int[] numbers = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110 };
 		bean.getArrayOfBeans()[0].setArrayOfInts(numbers);
 		final FlattenerTool tool = new FlattenerTool();
 		final Map<String, String> map = tool.flat(bean);
@@ -68,7 +94,7 @@ public class FlattenerToolTest {
 	}
 
 	@Test
-	public void testFlatOfSimpleTestBeanWitSortStrategy() {
+	public void testFlatOfSimpleTestBeanWithoutSortStrategy() {
 		Assert.assertNotNull(new FlattenerTool().flat(new ComplexTestBean()));
 	}
 

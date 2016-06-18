@@ -11,7 +11,7 @@ public class ArrayFlattenerTest {
 
 	@Before
 	public void setup() {
-		flattener = new ArrayFlattener(new FlattenerRegistryImpl());
+		this.flattener = new ArrayFlattener(new FlattenerRegistryImpl());
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -22,7 +22,7 @@ public class ArrayFlattenerTest {
 	@Test
 	public void testFlatIntArray() {
 		final int[] intArr = { 0, 1 };
-		final Map<String, String> result = flattener.flat(intArr);
+		final Map<String, String> result = this.flattener.flat(intArr);
 		Assert.assertNotNull(result);
 		Assert.assertEquals(5, result.size());
 		Assert.assertEquals("[I", result.get("#1ctype"));
@@ -35,7 +35,7 @@ public class ArrayFlattenerTest {
 	@Test
 	public void testFlatIntegerArray() {
 		final Number[] intArr = { 0, 1.1 };
-		final Map<String, String> result = flattener.flat(intArr);
+		final Map<String, String> result = this.flattener.flat(intArr);
 		Assert.assertNotNull(result);
 		Assert.assertEquals(5, result.size());
 		Assert.assertEquals("[Ljava.lang.Number;", result.get("#1ctype"));

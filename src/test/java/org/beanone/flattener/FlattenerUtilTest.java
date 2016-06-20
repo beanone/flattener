@@ -73,14 +73,15 @@ public class FlattenerUtilTest {
 	@Test
 	public void testPopulateArray() throws Exception {
 		final SimpleTestBean[] beans = new SimpleTestBean[10];
+		final int suffixSize = FlattenerContants.CTYPE_SUFFIX.length();
 		this.util.populateArray(beans,
-		        "arrayOfBeans.0" + FlattenerContants.CTYPE_SUFFIX, 7,
+		        "arrayOfBeans.0" + FlattenerContants.CTYPE_SUFFIX, suffixSize,
 		        new SimpleTestBean());
 		this.util.populateArray(beans,
-		        "arrayOfBeans.1" + FlattenerContants.CTYPE_SUFFIX, 7,
+		        "arrayOfBeans.1" + FlattenerContants.CTYPE_SUFFIX, suffixSize,
 		        new SimpleTestBean());
 		this.util.populateArray(beans,
-		        "arrayOfBeans.2" + FlattenerContants.CTYPE_SUFFIX, 7,
+		        "arrayOfBeans.2" + FlattenerContants.CTYPE_SUFFIX, suffixSize,
 		        new SimpleTestBean());
 		Assert.assertNotNull(beans[0]);
 		Assert.assertNotNull(beans[1]);
@@ -100,8 +101,8 @@ public class FlattenerUtilTest {
 		final SimpleTestBean bean = new SimpleTestBean();
 		final EnumHolder holder = new EnumHolder(ColorEnum.class);
 		holder.setValue(ColorEnum.BLUE);
-		this.util.populate(bean, "color" + FlattenerContants.CTYPE_SUFFIX, 7,
-		        holder);
+		this.util.populate(bean, "color" + FlattenerContants.CTYPE_SUFFIX,
+		        FlattenerContants.CTYPE_SUFFIX.length(), holder);
 		Assert.assertSame(ColorEnum.BLUE, bean.getColor());
 	}
 

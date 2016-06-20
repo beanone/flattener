@@ -107,7 +107,7 @@ public class FlattenerToolTest {
 		bean.setListSub(Arrays.asList("A", "B"));
 		bean.setMapBase(createMap());
 		Assert.assertEquals(
-		        "{%1ctype=org.beanone.flattener.SubClassTestBean, listBase%1ctype=java.util.Arrays$ArrayList, listBase%2size=2, listBase.0=S,a, listBase.1=S,b, listSub%1ctype=java.util.Arrays$ArrayList, listSub%2size=2, listSub.0=S,A, listSub.1=S,B, mapBase%1ctype=java.util.HashMap, mapBase%2size=2, mapBase.1%key=S,k1, mapBase.1%value=S,v1, mapBase.2%key=S,k2, mapBase.2%value=S,v2, strBase=S,string base, strSub=S,string sub}",
+		        "{%1cty=org.beanone.flattener.SubClassTestBean, listBase%1cty=java.util.Arrays$ArrayList, listBase%2siz=2, listBase.0=S,a, listBase.1=S,b, listSub%1cty=java.util.Arrays$ArrayList, listSub%2siz=2, listSub.0=S,A, listSub.1=S,B, mapBase%1cty=java.util.HashMap, mapBase%2siz=2, mapBase.1%1key=S,k1, mapBase.1%1val=S,v1, mapBase.2%1key=S,k2, mapBase.2%1val=S,v2, strBase=S,string base, strSub=S,string sub}",
 		        new FlattenerTool().flat(bean).toString().trim());
 	}
 

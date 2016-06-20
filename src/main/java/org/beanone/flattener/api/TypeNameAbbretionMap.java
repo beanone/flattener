@@ -22,10 +22,6 @@ import java.util.concurrent.atomic.AtomicLong;
 public class TypeNameAbbretionMap {
 	private static final TypeNameAbbretionMap INSTANCE = new TypeNameAbbretionMap();
 
-	public static TypeNameAbbretionMap getInstance() {
-		return INSTANCE;
-	}
-
 	private final Map<String, Class<?>> toClassMap = new HashMap<>();
 
 	private final Map<Class<?>, String> fromClassMap = new HashMap<>();
@@ -51,6 +47,10 @@ public class TypeNameAbbretionMap {
 		add("sd", java.sql.Date.class);
 		add("t", Time.class);
 		add("ts", Timestamp.class);
+	}
+
+	public static TypeNameAbbretionMap getInstance() {
+		return INSTANCE;
 	}
 
 	/**

@@ -48,6 +48,11 @@ public class NaturalComparator implements Comparator<String> {
 		}
 	}
 
+	private int compareString(String s1, String s2, int prefer) {
+		final int returns = s1.compareTo(s2);
+		return returns == 0 ? prefer : returns;
+	}
+
 	private int compareStringRemovePrefixingNumbers(String o1, String o2,
 	        int preference) {
 		final String s1 = removeNumberFromHead(o1);
@@ -68,11 +73,6 @@ public class NaturalComparator implements Comparator<String> {
 		final int newPreference = o1.substring(0, o1.indexOf(s1))
 		        .compareTo(o2.substring(0, o2.indexOf(s2)));
 		return compare(s1, s2, newPreference);
-	}
-
-	private int compareString(String s1, String s2, int prefer) {
-		final int returns = s1.compareTo(s2);
-		return returns == 0 ? prefer : returns;
 	}
 
 	private int parseIntNumer(String s) {

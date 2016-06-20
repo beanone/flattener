@@ -26,6 +26,20 @@ Another very important benefit that many might not realize is that, the act of f
 
 	Object aBean = new FlattenerTool().unflat(flatted);
 
+### Serialization and De-serialization:
+
+All attribute keys in the flattened object map are using the comonly used dot notation and thus when stored to files directly, it is not very efficient. To overcome this, a SerializationUtil is created. This class has 4 methods. Serialize to and de-serialize from Java properties (rendered to a string) and that to and from Json.
+
+	SerializerUtil.toString(map)
+	SerializerUtil.fromString(string)
+	
+and
+
+	SerializerUtil.toJson(map)
+	SerializerUtil.fromJson(json)
+	
+### Supported data types:
+
 By default, Flattener can handle primitive Java types and their wrapper classes, String, java.util.Date, java.sql.Date, java.sql.Time, java.sql.Timestamp, BigInterger, BigDecimal, AtomicInteger, AtomicLong, AtomicBoolean and simple enum values. All of which are treated as primitive flattener types (types that can be serialized to and from String).
 
 All java.util.Collection objects are handled by a CollectionFlattener and CollectionUnflattener. java.util.Map objects are handled by MapFlattener and MapUnflattener. All array objects are handled by ArrayFlattener and ArrayUnflattener. All other objects are handled by DefaultFlattener and DefaultUnflattener by default.
@@ -37,5 +51,3 @@ As seen above, this component already supports most of what one would need. Howe
 To register your own primitive flattener types, invoke the FlattenerTool.registerConverter() method. Every such type must be given an abbreviation (the third parameter). This abbreviation will be rendered as part of the value in the form of "abbr, value" during serialization, which can then be used by the consumer of the generated map to determine the data type of the value when needed. The ValueConverter is the second parameter of the method, and by default, it converts the object to String using the toString() method of the object. You can override it if needed. You implement the valueOf() method of the ValueConverter to define how String is de-serialized into your object.
 
 For complex types that you want to rendered to more than one string attributes (as oppose to the case with primitive flattener types), and if you don't like the flattener default serialized form of the object, you can define your own custom Flatteners and Unflatteners and register them with the FlattenerTool for it to be included. To implement a custom Flattener, simply extend the AbstractFlattener and override doFlat() method. You can also directly implement the Flattener interface. To implement custom Unflattener, simply extend AbstractUnflattener and override doCreateObject() and doPopulate() methods. You can also directly implement Unflattener.
-
-

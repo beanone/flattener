@@ -39,7 +39,7 @@ public class MapUnflattenerTest extends UnflattenerTestBase {
 		final Flattener flattener = createFlattener();
 		final Unflattener unflattener = createUnflattener();
 		final Map<String, String> flatted = flattener.flat(aMap);
-		flatted.remove("1#key");
+		flatted.remove("1" + FlattenerContants.KEY_SUFFIX);
 		Assert.assertNotNull(flatted);
 		unflattener.unflat(flatted);
 	}
@@ -52,7 +52,7 @@ public class MapUnflattenerTest extends UnflattenerTestBase {
 		final Flattener flattener = createFlattener();
 		final Unflattener unflattener = createUnflattener();
 		final Map<String, String> flatted = flattener.flat(aMap);
-		flatted.put("1#que", "S,b");
+		flatted.put("1$que", "S,b");
 		Assert.assertNotNull(flatted);
 		unflattener.unflat(flatted);
 	}

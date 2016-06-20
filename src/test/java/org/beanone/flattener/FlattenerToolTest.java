@@ -43,12 +43,12 @@ public class FlattenerToolTest {
 		final Map<String, String> result = tool.flat(intArr);
 		Assert.assertNotNull(result);
 		Assert.assertEquals(15, result.size());
-		Assert.assertEquals("[I", result.get("#1ctype"));
+		Assert.assertEquals("[I", result.get(FlattenerContants.CTYPE_SUFFIX));
 		Assert.assertEquals("I,0", result.get("0"));
 		Assert.assertEquals("I,1", result.get("1"));
 		Assert.assertEquals("I,11", result.get("11"));
-		Assert.assertEquals("12", result.get("#2size"));
-		Assert.assertEquals("int", result.get("#3etype"));
+		Assert.assertEquals("12", result.get(FlattenerContants.SIZE_SUFFIX));
+		Assert.assertEquals("int", result.get(FlattenerContants.ETYPE_SUFFIX));
 		final String[] strArray = result.keySet().toArray(new String[0]);
 		Assert.assertEquals(strArray[strArray.length - 1], "11");
 		final int[] resultArr = (int[]) tool.unflat(result);
@@ -107,7 +107,7 @@ public class FlattenerToolTest {
 		bean.setListSub(Arrays.asList("A", "B"));
 		bean.setMapBase(createMap());
 		Assert.assertEquals(
-		        "{#1ctype=org.beanone.flattener.SubClassTestBean, listBase#1ctype=java.util.Arrays$ArrayList, listBase#2size=2, listBase.0=S,a, listBase.1=S,b, listSub#1ctype=java.util.Arrays$ArrayList, listSub#2size=2, listSub.0=S,A, listSub.1=S,B, mapBase#1ctype=java.util.HashMap, mapBase#2size=2, mapBase.1#key=S,k1, mapBase.1#value=S,v1, mapBase.2#key=S,k2, mapBase.2#value=S,v2, strBase=S,string base, strSub=S,string sub}",
+		        "{%1ctype=org.beanone.flattener.SubClassTestBean, listBase%1ctype=java.util.Arrays$ArrayList, listBase%2size=2, listBase.0=S,a, listBase.1=S,b, listSub%1ctype=java.util.Arrays$ArrayList, listSub%2size=2, listSub.0=S,A, listSub.1=S,B, mapBase%1ctype=java.util.HashMap, mapBase%2size=2, mapBase.1%key=S,k1, mapBase.1%value=S,v1, mapBase.2%key=S,k2, mapBase.2%value=S,v2, strBase=S,string base, strSub=S,string sub}",
 		        new FlattenerTool().flat(bean).toString().trim());
 	}
 
@@ -132,7 +132,7 @@ public class FlattenerToolTest {
 		Assert.assertNotNull(result);
 		Assert.assertEquals(2, result.size());
 		Assert.assertEquals("org.beanone.flattener.EnumTestBean",
-		        result.get("#1ctype"));
+		        result.get(FlattenerContants.CTYPE_SUFFIX));
 		Assert.assertEquals("O,RED", result.get("color"));
 	}
 
@@ -172,7 +172,7 @@ public class FlattenerToolTest {
 		final FlattenerTool tool = new FlattenerTool()
 		        .registerUnflattener(clazz -> true, new MockUnflattener());
 		final Map<String, String> map = new HashMap<>();
-		map.put("#1ctype", String.class.getName());
+		map.put(FlattenerContants.CTYPE_SUFFIX, String.class.getName());
 		final Object result = tool.unflat(map);
 		Assert.assertNotNull(result);
 		Assert.assertEquals("Hello", result);

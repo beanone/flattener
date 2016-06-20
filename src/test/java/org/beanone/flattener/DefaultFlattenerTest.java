@@ -38,7 +38,7 @@ public class DefaultFlattenerTest {
 		Assert.assertNotNull(result);
 		Assert.assertEquals(34, result.size());
 		Assert.assertEquals("org.beanone.flattener.SimpleTestBean",
-		        result.get("#1ctype"));
+		        result.get(FlattenerContants.CTYPE_SUFFIX));
 		Assert.assertEquals("I,1", result.get("intVal"));
 		Assert.assertEquals("AI,1", result.get("aIntVal"));
 		Assert.assertEquals("I,1", result.get("intValue"));
@@ -60,7 +60,8 @@ public class DefaultFlattenerTest {
 		Assert.assertEquals("Y,1", result.get("byteValue"));
 		Assert.assertEquals("S,abc", result.get("strVal"));
 		// self reference
-		Assert.assertEquals("", result.get("selfRef#ref"));
+		Assert.assertEquals("",
+		        result.get("selfRef" + FlattenerContants.REF_SUFFIX));
 		assertTypedValue(result, "utilDateVal", "d");
 		assertTypedValue(result, "sqlDateVal", "sd");
 		assertTypedValue(result, "timeVal", "t");

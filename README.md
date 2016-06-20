@@ -37,7 +37,9 @@ and
 
 	SerializerUtil.toJson(map)
 	SerializerUtil.fromJson(json)
-	
+
+In both of the serialization form, the keys are abbreviated which help to save storage needed to store the serialized object.
+
 ### Supported data types:
 
 By default, Flattener can handle primitive Java types and their wrapper classes, String, java.util.Date, java.sql.Date, java.sql.Time, java.sql.Timestamp, BigInterger, BigDecimal, AtomicInteger, AtomicLong, AtomicBoolean and simple enum values. All of which are treated as primitive flattener types (types that can be serialized to and from String).

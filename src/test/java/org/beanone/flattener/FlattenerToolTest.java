@@ -35,9 +35,35 @@ public class FlattenerToolTest {
 	}
 
 	@Test
+	public void testFlatAndUnfatOfIntArray() {
+		// use more than 10 number to test that the resulting map is ordered by
+		// key using natural ordering.
+		final int[] intArr = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+		final FlattenerTool tool = new FlattenerTool();
+		final Map<String, String> result = tool.flat(intArr);
+		Assert.assertNotNull(result);
+		Assert.assertEquals(15, result.size());
+		Assert.assertEquals("[I", result.get(FlattenerContants.CTYPE_SUFFIX));
+		Assert.assertEquals("I,0", result.get("0"));
+		Assert.assertEquals("I,1", result.get("1"));
+		Assert.assertEquals("I,11", result.get("11"));
+		Assert.assertEquals("12", result.get(FlattenerContants.SIZE_SUFFIX));
+		Assert.assertEquals("int", result.get(FlattenerContants.ETYPE_SUFFIX));
+		final String[] strArray = result.keySet().toArray(new String[0]);
+		Assert.assertEquals(strArray[strArray.length - 1], "11");
+		final int[] resultArr = (int[]) tool.unflat(result);
+		Assert.assertEquals(intArr.length, resultArr.length);
+		for (int i = 0; i < intArr.length; i++) {
+			Assert.assertEquals(intArr[i], resultArr[i]);
+		}
+	}
+
+	@Test
 	public void testFlatAndUnflatOfComplexTestBean() {
 		final ComplexTestBean bean = new ComplexTestBean();
-		final int[] numbers = { 10, 20, 30 };
+		// with greater than 10 element, we test the natural ordering and proper
+		// unflat of object with such ordering.
+		final int[] numbers = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110 };
 		bean.getArrayOfBeans()[0].setArrayOfInts(numbers);
 		final FlattenerTool tool = new FlattenerTool();
 		final Map<String, String> map = tool.flat(bean);
@@ -68,7 +94,7 @@ public class FlattenerToolTest {
 	}
 
 	@Test
-	public void testFlatOfSimpleTestBeanWitSortStrategy() {
+	public void testFlatOfSimpleTestBeanWithoutSortStrategy() {
 		Assert.assertNotNull(new FlattenerTool().flat(new ComplexTestBean()));
 	}
 
@@ -81,7 +107,7 @@ public class FlattenerToolTest {
 		bean.setListSub(Arrays.asList("A", "B"));
 		bean.setMapBase(createMap());
 		Assert.assertEquals(
-		        "{#1ctype=org.beanone.flattener.SubClassTestBean, listBase#1ctype=java.util.Arrays$ArrayList, listBase#2size=2, listBase.0=S,a, listBase.1=S,b, listSub#1ctype=java.util.Arrays$ArrayList, listSub#2size=2, listSub.0=S,A, listSub.1=S,B, mapBase#1ctype=java.util.HashMap, mapBase#2size=2, mapBase.1#key=S,k1, mapBase.1#value=S,v1, mapBase.2#key=S,k2, mapBase.2#value=S,v2, strBase=S,string base, strSub=S,string sub}",
+		        "{%1cty=org.beanone.flattener.SubClassTestBean, listBase%1cty=java.util.Arrays$ArrayList, listBase%2siz=2, listBase.0=S,a, listBase.1=S,b, listSub%1cty=java.util.Arrays$ArrayList, listSub%2siz=2, listSub.0=S,A, listSub.1=S,B, mapBase%1cty=java.util.HashMap, mapBase%2siz=2, mapBase.1%1key=S,k1, mapBase.1%1val=S,v1, mapBase.2%1key=S,k2, mapBase.2%1val=S,v2, strBase=S,string base, strSub=S,string sub}",
 		        new FlattenerTool().flat(bean).toString().trim());
 	}
 
@@ -106,7 +132,7 @@ public class FlattenerToolTest {
 		Assert.assertNotNull(result);
 		Assert.assertEquals(2, result.size());
 		Assert.assertEquals("org.beanone.flattener.EnumTestBean",
-		        result.get("#1ctype"));
+		        result.get(FlattenerContants.CTYPE_SUFFIX));
 		Assert.assertEquals("O,RED", result.get("color"));
 	}
 
@@ -146,7 +172,7 @@ public class FlattenerToolTest {
 		final FlattenerTool tool = new FlattenerTool()
 		        .registerUnflattener(clazz -> true, new MockUnflattener());
 		final Map<String, String> map = new HashMap<>();
-		map.put("#1ctype", String.class.getName());
+		map.put(FlattenerContants.CTYPE_SUFFIX, String.class.getName());
 		final Object result = tool.unflat(map);
 		Assert.assertNotNull(result);
 		Assert.assertEquals("Hello", result);

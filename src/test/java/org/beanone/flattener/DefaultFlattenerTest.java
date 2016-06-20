@@ -28,27 +28,31 @@ public class DefaultFlattenerTest {
 		final KeyValueHandler handler = Mockito.mock(KeyValueHandler.class);
 		Mockito.doThrow(IllegalAccessException.class).when(handler).handle(
 		        Mockito.anyString(), Mockito.any(), Mockito.anyBoolean());
-		flattener.doFlat(new MockBean(), handler);
+		this.flattener.doFlat(new MockBean(), handler);
 	}
 
 	@Test
 	public void testFlat() {
-		final Map<String, String> result = flattener.flat(new SimpleTestBean());
+		final Map<String, String> result = this.flattener
+		        .flat(new SimpleTestBean());
 		Assert.assertNotNull(result);
-		Assert.assertEquals(27, result.size());
+		Assert.assertEquals(34, result.size());
 		Assert.assertEquals("org.beanone.flattener.SimpleTestBean",
-		        result.get("#1ctype"));
+		        result.get(FlattenerContants.CTYPE_SUFFIX));
 		Assert.assertEquals("I,1", result.get("intVal"));
+		Assert.assertEquals("AI,1", result.get("aIntVal"));
 		Assert.assertEquals("I,1", result.get("intValue"));
 		Assert.assertEquals("D,1.0", result.get("doubleVal"));
 		Assert.assertEquals("D,1.0", result.get("doubleValue"));
 		Assert.assertEquals("F,1.0", result.get("floatVal"));
 		Assert.assertEquals("F,1.0", result.get("floatValue"));
 		Assert.assertEquals("L,1", result.get("longVal"));
+		Assert.assertEquals("AL,1", result.get("aLongVal"));
 		Assert.assertEquals("L,1", result.get("longValue"));
 		Assert.assertEquals("H,1", result.get("shortVal"));
 		Assert.assertEquals("H,1", result.get("shortValue"));
 		Assert.assertEquals("B,true", result.get("booleanVal"));
+		Assert.assertEquals("AB,true", result.get("aBooleanVal"));
 		Assert.assertEquals("B,true", result.get("booleanValue"));
 		Assert.assertEquals("C,a", result.get("charVal"));
 		Assert.assertEquals("C,A", result.get("charValue"));
@@ -56,7 +60,8 @@ public class DefaultFlattenerTest {
 		Assert.assertEquals("Y,1", result.get("byteValue"));
 		Assert.assertEquals("S,abc", result.get("strVal"));
 		// self reference
-		Assert.assertEquals("", result.get("selfRef#ref"));
+		Assert.assertEquals("",
+		        result.get("selfRef" + FlattenerContants.REF_SUFFIX));
 		assertTypedValue(result, "utilDateVal", "d");
 		assertTypedValue(result, "sqlDateVal", "sd");
 		assertTypedValue(result, "timeVal", "t");
@@ -70,7 +75,7 @@ public class DefaultFlattenerTest {
 
 	public void testFlatArray() {
 		final int[] arr = { 10, 20, 30, 40 };
-		final Map<String, String> map = flattener.flat(arr);
+		final Map<String, String> map = this.flattener.flat(arr);
 		Assert.assertNotNull(map);
 		Assert.assertEquals(5, map.size());
 	}

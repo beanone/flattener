@@ -34,44 +34,54 @@ public class FlattenerUtilTest {
 	@Test
 	public void testExtractFieldName() {
 		Assert.assertEquals("map",
-		        util.extractFieldName("map#2size", "#2size".length()));
-		Assert.assertEquals("intValue", util
-		        .extractFieldName("listOfMapOfBeans.1.2#value.intValue", 0));
+		        this.util.extractFieldName(
+		                "map" + FlattenerContants.SIZE_SUFFIX,
+		                FlattenerContants.SIZE_SUFFIX.length()));
+		Assert.assertEquals("intValue",
+		        this.util.extractFieldName("listOfMapOfBeans.1."
+		                + FlattenerContants.VALUE_SUFFIX + ".intValue", 0));
 	}
 
 	@Test
 	public void testPopExpectSuffix() {
 		final KeyStack keys = new KeyStack();
-		keys.push("map.1#value");
-		keys.push("map.1#key");
-		keys.push("map#2size");
-		Assert.assertEquals("map#2size", util.popExpectSuffix(keys, "#2size"));
+		keys.push("map.1" + FlattenerContants.VALUE_SUFFIX);
+		keys.push("map.1" + FlattenerContants.KEY_SUFFIX);
+		keys.push("map" + FlattenerContants.SIZE_SUFFIX);
+		Assert.assertEquals("map" + FlattenerContants.SIZE_SUFFIX,
+		        this.util.popExpectSuffix(keys, FlattenerContants.SIZE_SUFFIX));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testPopExpectSuffixForInvalidSuffix() {
 		final KeyStack keys = new KeyStack();
-		keys.push("map.1#value");
-		keys.push("map.1#key");
-		keys.push("map#2size");
-		Assert.assertEquals("map#2size", util.popExpectSuffix(keys, "#key"));
+		keys.push("map.1" + FlattenerContants.VALUE_SUFFIX);
+		keys.push("map.1" + FlattenerContants.KEY_SUFFIX);
+		keys.push("map" + FlattenerContants.SIZE_SUFFIX);
+		Assert.assertEquals("map" + FlattenerContants.SIZE_SUFFIX,
+		        this.util.popExpectSuffix(keys, FlattenerContants.KEY_SUFFIX));
 	}
 
 	@Test
 	public void testPopulate() throws Exception {
 		final SimpleTestBean bean = new SimpleTestBean();
-		util.populate(bean, "listOfMapOfBeans.1.2#value.intVal", 0, 100);
+		this.util.populate(bean, "listOfMapOfBeans.1.2"
+		        + FlattenerContants.VALUE_SUFFIX + ".intVal", 0, 100);
 		Assert.assertEquals(100, bean.getIntVal());
 	}
 
 	@Test
 	public void testPopulateArray() throws Exception {
 		final SimpleTestBean[] beans = new SimpleTestBean[10];
-		util.populateArray(beans, "arrayOfBeans.0#1ctype", 7,
+		final int suffixSize = FlattenerContants.CTYPE_SUFFIX.length();
+		this.util.populateArray(beans,
+		        "arrayOfBeans.0" + FlattenerContants.CTYPE_SUFFIX, suffixSize,
 		        new SimpleTestBean());
-		util.populateArray(beans, "arrayOfBeans.1#1ctype", 7,
+		this.util.populateArray(beans,
+		        "arrayOfBeans.1" + FlattenerContants.CTYPE_SUFFIX, suffixSize,
 		        new SimpleTestBean());
-		util.populateArray(beans, "arrayOfBeans.2#1ctype", 7,
+		this.util.populateArray(beans,
+		        "arrayOfBeans.2" + FlattenerContants.CTYPE_SUFFIX, suffixSize,
 		        new SimpleTestBean());
 		Assert.assertNotNull(beans[0]);
 		Assert.assertNotNull(beans[1]);
@@ -81,7 +91,7 @@ public class FlattenerUtilTest {
 	@Test
 	public void testPopulateCollection() throws Exception {
 		final Collection<Integer> integers = new ArrayList<>();
-		util.populateCollection(integers, 10);
+		this.util.populateCollection(integers, 10);
 		Assert.assertEquals(1, integers.size());
 		Assert.assertEquals(new Integer(10), integers.iterator().next());
 	}
@@ -91,21 +101,22 @@ public class FlattenerUtilTest {
 		final SimpleTestBean bean = new SimpleTestBean();
 		final EnumHolder holder = new EnumHolder(ColorEnum.class);
 		holder.setValue(ColorEnum.BLUE);
-		util.populate(bean, "color#1ctype", 7, holder);
+		this.util.populate(bean, "color" + FlattenerContants.CTYPE_SUFFIX,
+		        FlattenerContants.CTYPE_SUFFIX.length(), holder);
 		Assert.assertSame(ColorEnum.BLUE, bean.getColor());
 	}
 
 	@Test
 	public void testPopulateIgnoreNoSuchMethodException() throws Exception {
 		final ClassWithAttributeNoSetter bean = new ClassWithAttributeNoSetter();
-		util.populate(bean, "withSetter", 0, "Hello");
-		util.populate(bean, "noSetter", 0, "Hello");
+		this.util.populate(bean, "withSetter", 0, "Hello");
+		this.util.populate(bean, "noSetter", 0, "Hello");
 		Assert.assertEquals("Hello", bean.getWithSetter());
 		Assert.assertNull(bean.getNoSetter());
 	}
 
 	private <T> void testCreateObject(Class<T> clazz) throws Exception {
-		final Object object = util.createObject(clazz);
+		final Object object = this.util.createObject(clazz);
 		Assert.assertNotNull(object);
 		Assert.assertEquals(clazz, object.getClass());
 	}

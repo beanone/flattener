@@ -14,6 +14,8 @@ import java.util.Stack;
  *
  */
 public class KeyStack {
+	private final Deque<String> data = new ArrayDeque<>();
+
 	public static KeyStack create(Set<String> keys) {
 		final KeyStack keyStack = new KeyStack();
 		keys.forEach(keyStack::push);
@@ -25,8 +27,6 @@ public class KeyStack {
 		Arrays.asList(keys).forEach(keyStack::push);
 		return keyStack;
 	}
-
-	private final Deque<String> data = new ArrayDeque<>();
 
 	public boolean isEmpty() {
 		return data.isEmpty();

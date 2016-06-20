@@ -13,7 +13,7 @@ public class CollectionFlattenerTest {
 
 	@Before
 	public void setup() {
-		flattener = new CollectionFlattener(new FlattenerRegistryImpl());
+		this.flattener = new CollectionFlattener(new FlattenerRegistryImpl());
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -27,13 +27,14 @@ public class CollectionFlattenerTest {
 		intList.add(0);
 		intList.add(1.1);
 
-		final Map<String, String> result = flattener.flat(intList);
+		final Map<String, String> result = this.flattener.flat(intList);
 		Assert.assertNotNull(result);
 		Assert.assertEquals(4, result.size());
-		Assert.assertEquals("java.util.ArrayList", result.get("#1ctype"));
+		Assert.assertEquals("java.util.ArrayList",
+		        result.get(FlattenerContants.CTYPE_SUFFIX));
 		Assert.assertEquals("I,0", result.get("0"));
 		Assert.assertEquals("D,1.1", result.get("1"));
-		Assert.assertEquals("2", result.get("#2size"));
+		Assert.assertEquals("2", result.get(FlattenerContants.SIZE_SUFFIX));
 	}
 
 }
